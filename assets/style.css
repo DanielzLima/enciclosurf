@@ -1,0 +1,179 @@
+body {
+  background: #0f172a;
+  font-family: Arial, sans-serif;
+  color: #fff;
+}
+
+header{
+font-family: "Saira Stencil", sans-serif;
+width: 100%;
+}
+.content-header{
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 0.5px solid #90c8e460 ;
+}
+header a {
+  text-decoration: none;
+  font-size: 16px;
+  color: #09e3eb;
+}
+header .cadastro{
+  font-weight: bold;
+}
+header .logo{
+  font-weight: bold;
+}
+
+header button{
+  font-size: 16px;
+  border-radius: 5px;
+  border-style: none;
+  font-family: "Saira Stencil", sans-serif;
+  font-weight: bold;
+  color:rgb(20, 20, 19);
+  background-color:rgb(201, 231, 28)   ;
+  -webkit-text-stroke: 0.1px rgb(229, 242, 245);  
+  transition: 0.3s;
+}
+
+header button:hover{
+  transform: scale(1.2);
+  -webkit-text-stroke: 0.5px rgb(39, 40, 41);  
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+header .login a{
+  padding:0 10px;
+  transition: 0.3s;
+  border-radius: 5px;
+
+}
+header .login a:hover{
+  background-color: #09e3eb;
+  color: rgb(25, 54, 80);
+  border-radius: 5px;
+  -webkit-text-stroke: 0.2px rgb(39, 40, 41);  
+  transform: scale(1.2);
+  text-transform: uppercase;
+}
+
+header nav{
+  cursor: pointer;
+}
+
+header .linkMenu{
+  gap: 20px;
+  padding-left: 20px;
+  color: aliceblue;
+  transition: 0.2s;
+}
+header .linkMenu:hover{
+  color: rgb(213, 236, 5);
+}
+
+.content-body{
+  max-width:1200px ;
+  margin: 0 auto;
+  padding: 0 20px;
+  
+}
+h1{
+  font-family: "Saira Stencil", sans-serif;
+}
+h1 i {
+  font-size: 20px;
+  padding: 0 0 10px;
+  color: #07d7fc;
+}
+
+
+.grid-destaques{
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 200px 200px;
+  gap: 10px;
+}
+.grid-destaques img{
+  transition: 0.4s;
+  z-index: 1;
+  display: block;
+}
+.grid-destaques >div{
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  
+}
+.overlay{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0));
+  color: #fff;
+  opacity: 0;
+  transition: 0.4s;
+  z-index: 2;
+}
+.grid-destaques div:hover .overlay{
+  opacity: 1;
+  cursor: pointer;
+}
+.grid-destaques div:hover img{
+  transform: scale(1.05);
+}
+.card-1{
+  grid-row: span 2;
+}
+.card-1 h2{
+    color: #0f172a;
+    font-size: 20px;
+    -webkit-text-stroke: 0.2px rgb(213, 218, 223);  
+    text-transform: uppercase;
+}
+.card-1 p{
+  color: #cee0e2;
+  font-size: 16px;
+  font-weight: bold;
+  -webkit-text-stroke: 0.5px rgb(39, 40, 41);  
+}
+.card:nth-child(2){
+  grid-column: 2;
+  grid-row: 1;
+}
+.card:nth-child(3){
+  grid-column: 2;
+  grid-row: 2;
+}
+.card{
+  height: 100%;
+}
+.card h2 {
+  color: #0f172a;
+  font-size: 20px;
+    -webkit-text-stroke: 0.2px rgb(213, 218, 223);  
+    text-transform: uppercase;
+}
+.card p{
+  color: #cee0e2;
+  font-size: 16px;
+  font-weight: bold;
+  -webkit-text-stroke: 0.5px rgb(39, 40, 41);  
+}
+.grid-destaques img{
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+.grid-destaques .data{
+    -webkit-text-stroke: 0.2px rgb(39, 40, 41);  
+    font-size: 12px;
+    font-style: italic;
+  }
