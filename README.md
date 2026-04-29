@@ -1,48 +1,74 @@
-# 🌊 EncicloSurf
+🚀 Enciclosurf
 
-Plataforma em desenvolvimento com o objetivo de conectar o ecossistema do surf:
+Plataforma em desenvolvimento com o objetivo de conectar todo o ecossistema do surf em um só lugar.
 
-- Surfistas
-- comercios
-- Fotógrafos
-- Escolinhas
-- Serviços locais
-- Turismo e economia regional
+🌊 Visão
 
-## 🚀 Objetivo
+O Enciclosurf nasce com a proposta de integrar:
 
-Criar uma experiência onde usuários possam:
+Surfistas
+Comércios locais
+Fotógrafos
+Escolas
+Serviços
+Turismo e economia regional
 
-- Visualizar previsão de ondas em tempo real
-- Fazer check-in em picos de surf
-- Conectar-se com serviços locais
-- Encontrar fotos e conteúdos personalizados
-- Criar nossa propria API de previsao de ondas com dados coletados dos proprios usuários 
+Criando um ambiente onde dados, experiências e oportunidades se conectam.
 
-## 🛠️ Tecnologias utilizadas
+🎯 Objetivo
 
-- HTML
-- CSS
-- JavaScript
-- API de previsão marítima (Stormglass)
+Permitir que usuários possam:
 
-## ⚙️ Funcionalidades atuais
+Visualizar picos de surf
+Buscar destinos e experiências
+Interagir com serviços locais
+(Futuro) Acessar previsões de ondas com base em dados reais
+(Futuro) Contribuir com dados e avaliações da comunidade
+⚙️ Tecnologias
+Antes
+HTML
+CSS
+JavaScript
+API externa (Stormglass)
+Agora
+Next.js (React)
+Supabase (backend e banco de dados)
+Arquitetura escalável baseada em dados
+🔥 Funcionalidades atuais
+✅ Integração com Supabase (dados reais)
+✅ Cadastro e listagem de picos
+✅ Busca dinâmica em tempo real
+✅ Filtros por atributos (estrutura inicial)
+✅ Autocomplete de picos
+✅ Navegação dinâmica (/pico/[id])
+✅ Estrutura de páginas para:
+Previsão
+Informações
+Viagens
+🚧 Em desenvolvimento
+🗺️ Mapa interativo com localização dos picos
+🌊 Sistema de previsão de ondas próprio
+⭐ Sistema de avaliações e ranking
+📍 Check-in em picos
+📸 Feed de conteúdo da comunidade
+✈️ Marketplace de serviços e experiências
+📈 Evolução do projeto
 
-- Integração com API de previsão (em desenvolvimento)
-- Interface com destaques visuais
-- Estrutura inicial de layout
+📌 Versão inicial:
 
-## 📈 Próximos passos
+Projeto estático (HTML/CSS/JS)
 
-- Implementar backend com cache (Node.js / Supabase)
-- Sistema de usuários e check-in
-- Feed estilo blog/notícias
-- Integração com serviços locais
+📌 Versão atual:
 
-## 💡 Visão
+Aplicação com frontend moderno (Next.js)
+Integração com banco de dados real
+Estrutura de produto escalável
+💡 Visão de futuro
 
-Transformar o EncicloSurf em uma plataforma que conecta pessoas, serviços e experiências dentro do universo do surf.
+Construir uma plataforma onde:
 
----
+A comunidade do surf contribui com dados reais, criando uma nova forma de prever ondas, descobrir picos e movimentar a economia local.
 
-👨‍💻 Desenvolvido por Daniel Lima
+👨‍💻 Desenvolvido por
+
+Daniel Lima
