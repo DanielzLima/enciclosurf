@@ -520,3 +520,24 @@ color: white;
 border-radius: 6px;
 padding: 8px;
 }
+
+
+
+.suggestions {
+  background: #111;
+  border: 1px solid #333;
+  border-radius: 8px;
+  margin-top: 10px;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.suggestion-item {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.suggestion-item:hover {
+  background: #222;
+}

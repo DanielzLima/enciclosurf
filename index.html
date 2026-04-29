@@ -13,27 +13,86 @@
 </head>
 <header class="header">
   <div class="content-header">
-    <div class="logo">
-        <a href="/index.html">ENCICLOSURF</a>
-    </div>
-    <nav>
-        <a class="linkMenu" href="#">Previsão</a>
-        <a class="linkMenu" href="#" >Blog</a>
-        <a class="linkMenu" href="#">Picos - Trip's</a>
-        <a class="linkMenu" href="#">Social</a>
+
+    <!-- LOGO -->
+    <a href="/index.html" class="logo">
+      <img src="/assets/Enciclosurf-logo.jpg" alt="Enciclosurf">
+      <span>Enciclosurf</span>
+    </a>
+
+    <!-- MENU -->
+    <nav class="nav">
+      <a href="#">Previsão</a>
+      <a href="#">Blog</a>
+      <a href="#">Picos</a>
+      <a href="#">Social</a>
     </nav>
-       <div class="social-icons">
-      <a src="#"><i class="fa-brands fa-instagram"></i></a>
-      <a src="#"><i class="fa-brands fa-facebook"></i></a>
+
+    <!-- ACTIONS -->
+    <div class="actions">
+      <div class="social-icons">
+        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#"><i class="fa-brands fa-facebook"></i></a>
+      </div>
+
+      <a class="cadastro" href="#">Cadastre-se</a>
+      <button class="buttonLogin">Login</button>
     </div>
-    <div class="login">
-         <a class="cadastro" href="#">Cadastre-se</a>
-        <button class="buttonLogin">Login  </button>
-    </div>
-  </div>  
+
+  </div>
 </header>
 <body>
 <main class="content-body">
+
+  <section class="hero">
+
+  <div class="hero-overlay"></div>
+
+  <div class="hero-content">
+
+    <h1>
+      Encontre o <span>pico perfeito</span>
+    </h1>
+
+    <p id="hero-subtitle">
+      Carregando sua localização...
+    </p>
+
+    <!-- SEARCH -->
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Buscar praia ou cidade...">
+      <button onclick="handleSearch()">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+    </div>
+
+    <!-- RESULTADO INTELIGENTE -->
+    <div class="hero-suggestion" id="heroSuggestion"></div>
+
+  </div>
+
+</section>
+
+    <section id="picoResult" class="pico-result hidden">
+      <div class="cards">
+
+        <div class="card-pico">
+          <h2>Previsão</h2>
+          <p>Veja condições do mar</p>
+        </div>
+
+        <div class="card-pico">
+          <h2>Infomações</h2>
+          <p>Guia completo do pico</p>
+        </div>
+
+        <div class="card-pico">
+          <h2>Viagens</h2>
+          <p>Pacotes e Hospedagem</p>
+        </div>
+      </div>
+
+    </section>
 
     <section class="destaques">
       
@@ -63,7 +122,7 @@
         </div>
       </div>
     </section>
-    <h1><i class="fa-solid fa-arrows-turn-right"></i> Previsão</h1>
+    <!-- <h1><i class="fa-solid fa-arrows-turn-right"></i> Previsão</h1>
     <section class="Previsao">
         <div class="content-previsao">
 
@@ -73,9 +132,22 @@
     <section>
       <h1><i class="fa-solid fa-arrows-turn-right"></i> Picos - Trip's</h1>
       <div class="picos-Destaque">
+        <div class="content-pesquisar">
+          <input type="text" id="buscaPico" placeholder="Buscar Picos ou Trip's...">
+          <button><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+          
+        
+          <input id="nome" placeholder="Nome do Pico">
+          <input id="descricao" placeholder="Descrição">
+          <input id="preco" placeholder="Preço">
+          <input id="imagem" placeholder="/assets/iamgem3">
+          <button onclick="adicionarPico()">Adicionar</button>
         
       </div>  
-    </section>
+        
+      <div class="picos-grid" id="picosGrid"></div>
+    </section> -->
 </main>
    
   <script src="/script.js"></script>  
