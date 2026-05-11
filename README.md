@@ -1,48 +1,36 @@
-# 🌊 EncicloSurf
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-Plataforma em desenvolvimento com o objetivo de conectar o ecossistema do surf:
+## Getting Started
 
-- Surfistas
-- comercios
-- Fotógrafos
-- Escolinhas
-- Serviços locais
-- Turismo e economia regional
+First, run the development server:
 
-## 🚀 Objetivo
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
-Criar uma experiência onde usuários possam:
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-- Visualizar previsão de ondas em tempo real
-- Fazer check-in em picos de surf
-- Conectar-se com serviços locais
-- Encontrar fotos e conteúdos personalizados
-- Criar nossa propria API de previsao de ondas com dados coletados dos proprios usuários 
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-## 🛠️ Tecnologias utilizadas
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-- HTML
-- CSS
-- JavaScript
-- API de previsão marítima (Stormglass)
+## Learn More
 
-## ⚙️ Funcionalidades atuais
+To learn more about Next.js, take a look at the following resources:
 
-- Integração com API de previsão (em desenvolvimento)
-- Interface com destaques visuais
-- Estrutura inicial de layout
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-## 📈 Próximos passos
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-- Implementar backend com cache (Node.js / Supabase)
-- Sistema de usuários e check-in
-- Feed estilo blog/notícias
-- Integração com serviços locais
+## Deploy on Vercel
 
-## 💡 Visão
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Transformar o EncicloSurf em uma plataforma que conecta pessoas, serviços e experiências dentro do universo do surf.
-
----
-
-👨‍💻 Desenvolvido por Daniel Lima
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

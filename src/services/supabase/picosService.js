@@ -30,19 +30,14 @@ export async function addPico(pico) {
 
 // auto complete
 
-export async function getPicoById(id) {
-  if (!id) return null;
-
+export async function getPicoBySlug(slug) {
   const { data, error } = await supabase
     .from("picos")
     .select("*")
-    .eq("id", id)
+    .eq("slug", slug)
     .single();
 
-  if (error) {
-    console.error(error);
-    return null;
-  }
+  if (error) return null;
 
   return data;
 }
