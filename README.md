@@ -1,113 +1,188 @@
-<<<<<<< HEAD
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌊 EncicloSurf
 
-## Getting Started
+Plataforma colaborativa de surf desenvolvida para conectar comunidade, dados em tempo real e economia local em um único ecossistema.
 
-First, run the development server:
+---
+
+# 🚀 Visão do Projeto
+
+O EncicloSurf nasce com a proposta de criar uma experiência parecida com:
+
+* Surfline + Waze do Surf + Comunidade Local
+
+A ideia é permitir que surfistas compartilhem condições reais do mar em tempo real, criando inteligência coletiva sobre os picos do Brasil.
+
+Além das condições do mar, a plataforma também será um hub de:
+
+* turismo
+* viagens
+* eventos
+* experiências
+* hospedagens
+* lifestyle
+* economia local
+
+Tudo integrado em torno de cada pico de surf.
+
+---
+
+# 🎯 Objetivo
+
+Criar uma plataforma colaborativa onde usuários possam:
+
+* visualizar condições reais do mar
+* acessar informações dos picos
+* acompanhar tendências das ondas
+* descobrir viagens e experiências
+* contribuir com reports da comunidade
+* gerar dados históricos e inteligência de surf
+
+---
+
+# ⚙️ Tecnologias
+
+## Frontend
+
+* Next.js (App Router)
+* React
+* CSS Modules / Global CSS
+
+## Backend
+
+* Supabase
+* PostgreSQL
+
+## Arquitetura
+
+* Componentização
+* Mobile-first
+* Estrutura escalável baseada em dados
+* Session-based interactions (sem login inicialmente)
+
+---
+
+# 🔥 Funcionalidades Atuais
+
+## 🌊 Sistema de Reports
+
+* ✅ Reports em tempo real
+* ✅ Sistema anti-spam via session_id
+* ✅ Limite diário de reports
+* ✅ Score da comunidade
+* ✅ Tendência do pico (melhorando / piorando)
+* ✅ Distribuição de condições:
+
+  * Flat
+  * Boas
+  * Clássico
+
+## 📍 Página Dinâmica de Pico
+
+* ✅ Rotas dinâmicas (`/pico/[slug]`)
+* ✅ Hero responsivo
+* ✅ Dashboard do pico
+* ✅ Mapa integrado
+* ✅ Gráfico de swell
+* ✅ Tábua de maré
+* ✅ Informações do pico
+
+## 🔍 Sistema de Busca
+
+* ✅ Busca dinâmica
+* ✅ Autocomplete
+* ✅ Navegação inteligente entre picos
+
+---
+
+# 🧠 Em Desenvolvimento
+
+## Fase Atual — Feed AO VIVO
+
+* 🚧 Feed de reports em tempo real
+* 🚧 Comentários opcionais pós-report
+* 🚧 Usuários anônimos via sessão
+* 🚧 Tempo relativo ("2 min atrás")
+* 🚧 Score inteligente do pico
+* 🚧 Peso maior para reports recentes
+
+## Próximas Features
+
+* 🌊 Histórico de condições
+* 📈 Gráficos avançados
+* 🗺️ Heatmap de crowd
+* 📸 Feed da comunidade
+* ✈️ Surf trips
+* 🎉 Eventos
+* 🏨 Hospedagens
+* 🏄 Marketplace local
+
+---
+
+# 📱 Filosofia Mobile-First
+
+O EncicloSurf está sendo desenvolvido com foco em:
+
+* performance
+* simplicidade
+* navegação rápida
+* experiência mobile
+* conteúdo acima da dobra
+* consumo rápido de informação
+
+Estrutura pensada para uso real na praia e durante sessões.
+
+---
+
+# 🧱 Estrutura Atual do Projeto
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+app/
+ ├── pico/[slug]/page.js
+ ├── components/
+ ├── services/
+ ├── utils/
+
+components/
+ ├── Header.jsx
+ ├── Hero.jsx
+ ├── ReportButtons.jsx
+ ├── CommunityFeed.jsx
+ ├── ForecastChart.jsx
+ ├── Map.jsx
+
+services/
+ ├── supabase/
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# ▶️ Como Rodar o Projeto
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm install
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Aplicação disponível em:
 
-## Learn More
+```bash
+http://localhost:3000
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# 💡 Visão de Longo Prazo
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Transformar o EncicloSurf em uma plataforma colaborativa capaz de:
 
-## Deploy on Vercel
+* gerar inteligência coletiva sobre o mar
+* fomentar turismo regional
+* fortalecer comunidades locais
+* conectar surfistas e negócios
+* criar o maior banco colaborativo de condições de surf do Brasil
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-
-🚀 Enciclosurf
-
-Plataforma em desenvolvimento com o objetivo de conectar todo o ecossistema do surf em um só lugar.
-
-🌊 Visão
-
-O Enciclosurf nasce com a proposta de integrar:
-
-Surfistas
-Comércios locais
-Fotógrafos
-Escolas
-Serviços
-Turismo e economia regional
-
-Criando um ambiente onde dados, experiências e oportunidades se conectam.
-
-🎯 Objetivo
-
-Permitir que usuários possam:
-
-Visualizar picos de surf
-Buscar destinos e experiências
-Interagir com serviços locais
-(Futuro) Acessar previsões de ondas com base em dados reais
-(Futuro) Contribuir com dados e avaliações da comunidade
-⚙️ Tecnologias
-Antes
-HTML
-CSS
-JavaScript
-API externa (Stormglass)
-Agora
-Next.js (React)
-Supabase (backend e banco de dados)
-Arquitetura escalável baseada em dados
-🔥 Funcionalidades atuais
-✅ Integração com Supabase (dados reais)
-✅ Cadastro e listagem de picos
-✅ Busca dinâmica em tempo real
-✅ Filtros por atributos (estrutura inicial)
-✅ Autocomplete de picos
-✅ Navegação dinâmica (/pico/[id])
-✅ Estrutura de páginas para:
-Previsão
-Informações
-Viagens
-🚧 Em desenvolvimento
-🗺️ Mapa interativo com localização dos picos
-🌊 Sistema de previsão de ondas próprio
-⭐ Sistema de avaliações e ranking
-📍 Check-in em picos
-📸 Feed de conteúdo da comunidade
-✈️ Marketplace de serviços e experiências
-📈 Evolução do projeto
-
-📌 Versão inicial:
-
-Projeto estático (HTML/CSS/JS)
-
-📌 Versão atual:
-
-Aplicação com frontend moderno (Next.js)
-Integração com banco de dados real
-Estrutura de produto escalável
-💡 Visão de futuro
-
-Construir uma plataforma onde:
-
-A comunidade do surf contribui com dados reais, criando uma nova forma de prever ondas, descobrir picos e movimentar a economia local.
-
-👨‍💻 Desenvolvido por
+# 👨‍💻 Desenvolvido por
 
 Daniel Lima
->>>>>>> 64d8afc8921bf86e59e65f46a6aae111ee11d89b
+
+Desenvolvedor Frontend em evolução construindo projetos reais focados em produto, comunidade e experiência do usuário.
