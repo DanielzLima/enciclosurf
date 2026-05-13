@@ -2256,3 +2256,47 @@ padding: 8px;
   text-align:center;
 }
 
+   /* SLUG SECTION BASE */
+
+
+.slug-section{
+  width:100%;
+  margin-top:24px;
+}
+
+.slug-card{
+  width:100%;
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:20px;
+  padding:20px;
+  overflow:hidden;
+}
+
+
+   /* CHART WRAPPER */
+
+
+.chart-wrapper{
+  width:100%;
+  overflow-x:auto;
+  overflow-y:hidden;
+  border-radius:18px;
+}
+
+.chart-wrapper{
+  width:100%;
+  height:220px;
+  overflow:hidden;
+}
+
+
+
+   /* FINAL CARDS */
+
+
+.final-cards{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+}

@@ -50,4 +50,15 @@
   .forecast-grid {
     grid-template-columns: 1fr;
   }
+
+  .tide-list div{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:6px;
+  }
+
+  .final-cards{
+    grid-template-columns:1fr;
+  }
+
 }

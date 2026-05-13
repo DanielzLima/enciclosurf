@@ -3,6 +3,7 @@ import ForecastChart from "../../../components/ForecastChart";
 import Map from "../../../components/Map";
 import ReportButtons from "../../../components/ReportButtons";
 import "../pico.css";
+import Footer from "../../../components/Footer";
 
 import {
   getTodayReports,
@@ -459,6 +460,8 @@ const flatPercent =
         </div>
 
       </section>
+      
+      <Footer />
 
     </main>
   );
