@@ -2,6 +2,7 @@ import { getPicoBySlug } from "../../../services/supabase/picosService";
 import ForecastChart from "../../../components/ForecastChart";
 import Map from "../../../components/Map";
 import ReportButtons from "../../../components/ReportButtons";
+import "../pico.css";
 
 import {
   getTodayReports,
