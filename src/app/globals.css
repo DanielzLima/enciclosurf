@@ -66,7 +66,7 @@ h1,h2,h3,h4 {
   position: sticky;
   top: 0;
   z-index: 1000;
-
+  height: 80px;
   backdrop-filter: blur(12px);
   background: rgba(15, 23, 42, 0.6);
   border-bottom: 1px solid var(--border);
@@ -188,6 +188,7 @@ h1,h2,h3,h4 {
   margin: 0 auto;
   padding: 0 20px;
   width: 100%;
+  padding-top: 30px;
   
 }
 
@@ -2299,4 +2300,149 @@ padding: 8px;
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:18px;
+}
+
+
+/* =========================
+   MOBILE MENU
+========================= */
+
+.menu-mobile{
+
+  display:none;
+
+  background:transparent;
+  border:none;
+  color:white;
+  font-size:28px;
+  cursor:pointer;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+  .nav{
+    display:none;
+  }
+
+  .actions{
+    display:none;
+  }
+
+  .menu-mobile{
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    width:44px;
+    height:44px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:rgba(255,255,255,0.05);
+
+    color:white;
+
+    font-size:22px;
+
+    cursor:pointer;
+  }
+
+}
+
+/* =========================
+   MOBILE DRAWER
+========================= */
+
+.mobile-overlay{
+
+  position:fixed;
+
+  inset:0;
+
+  background:rgba(0,0,0,.55);
+
+  backdrop-filter:blur(4px);
+
+  z-index:1200;
+}
+
+.mobile-drawer{
+
+  position:fixed;
+
+  top:0;
+  right:-100%;
+
+  width:280px;
+  height:100vh;
+
+  background:#020617;
+
+  border-left:1px solid rgba(255,255,255,.08);
+
+  z-index:1300;
+
+  padding:24px;
+
+  transition:.35s ease;
+
+  display:flex;
+
+  flex-direction:column;
+}
+
+.mobile-drawer.open{
+  right:0;
+}
+
+.close-menu{
+
+  align-self:flex-end;
+
+  background:none;
+
+  border:none;
+
+  color:white;
+
+  font-size:28px;
+
+  cursor:pointer;
+
+  margin-bottom:30px;
+}
+
+.mobile-nav{
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:22px;
+}
+
+.mobile-nav a{
+
+  color:white;
+
+  text-decoration:none;
+
+  font-size:18px;
+
+  transition:.2s;
+}
+
+.mobile-nav a:hover{
+  color:var(--primary);
+}
+
+.mobile-actions{
+
+  margin-top:auto;
 }

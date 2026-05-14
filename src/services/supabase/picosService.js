@@ -41,3 +41,17 @@ export async function getPicoBySlug(slug) {
 
   return data;
 }
+
+export async function getAllPicos() {
+
+  const { data, error } = await supabase
+    .from("picos")
+    .select("*");
+
+  if (error) {
+    console.error(error);
+    return [];
+  }
+
+  return data;
+}

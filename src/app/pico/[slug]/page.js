@@ -3,12 +3,58 @@ import ForecastChart from "../../../components/ForecastChart";
 import Map from "../../../components/Map";
 import ReportButtons from "../../../components/ReportButtons";
 import "../pico.css";
-import Footer from "../../../components/Footer";
+import Script from "next/script";
 
 import {
   getTodayReports,
   getYesterdayReports,
 } from "../../../services/supabase/reportsService";
+
+export async function generateMetadata({ params }) {
+
+  const { slug } =  params;
+
+  const pico = await getPicoBySlug(slug);
+
+  if (!pico) {
+
+    return {
+      title: "Pico não encontrado | Enciclosurf",
+    };
+    
+  }
+
+  return {
+
+    title:
+      `${pico.nome}: Surf, Previsão e Condições do Mar | Enciclosurf`,
+
+    description:
+      `Veja previsão do mar, swell, vento e reports da comunidade em ${pico.nome}.`,
+
+    openGraph: {
+
+      title:
+        `${pico.nome} | Enciclosurf`,
+
+      description:
+        `Veja como está o mar hoje em ${pico.nome}.`,
+
+      images: [
+        {
+          url: pico.imagem,
+          width: 1200,
+          height: 630,
+        },
+      ],
+
+      type: "website",
+    },
+
+  };
+
+}
+
 
 export default async function PicoPage({ params }) {
 
@@ -20,7 +66,27 @@ export default async function PicoPage({ params }) {
   if (!pico) {
     return <h1>Pico não encontrado</h1>;
   }
+  const schema = {
 
+  "@context": "https://schema.org",
+
+  "@type": "Place",
+
+  name: pico.nome,
+
+  description: pico.descricao,
+
+  image: pico.imagem,
+
+  address: {
+
+    "@type": "PostalAddress",
+
+    addressRegion: pico.uf,
+
+    addressCountry: "BR",
+  },
+};
   // REPORTS
   const todayReports = await getTodayReports(pico.id);
 
@@ -127,10 +193,18 @@ const flatPercent =
     { dia: "Sex", onda: 1.0 },
   ];
 
-  return (
+return (
+  <>
+    <Script
+      id="schema-pico"
+      type="application/ld+json"
+      strategy="afterInteractive"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(schema),
+      }}
+    />
 
     <main className="content-body">
-
       <section className="pico-hero">
 
         {/* OVERLAY */}
@@ -461,8 +535,8 @@ const flatPercent =
 
       </section>
       
-      <Footer />
 
     </main>
+    </>
   );
 }

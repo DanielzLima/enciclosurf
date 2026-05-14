@@ -3,9 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import CommunityFeed from "../components/CommunityFeed";
-import Header from "../components/Header";
 import Hero from "../components/Hero";
-import Footer from "../components/Footer";
 import AddSpotModal from "../components/AddSpotModal";
 
 import { getPicos } from "../services/supabase/picosService";
@@ -36,7 +34,7 @@ export default function Home() {
 
   return (
     <>
-      <Header />
+      
 
       <Hero
         search={search}
@@ -120,7 +118,7 @@ export default function Home() {
         onClose={() => setOpenModal(false)}
       />
       
-      <Footer />
+      
     </>
   );
 }
