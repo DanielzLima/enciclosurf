@@ -28,26 +28,37 @@ export default function ReportButtons({
     useState("");
 
   const [openTagsModal, setOpenTagsModal] =
-  useState(false);
+    useState(false);
 
-  const [currentReportId, setCurrentReportId] =
-  useState(null);
+  const [selectedRating, setSelectedRating] =
+    useState(null);
 
-  async function handleVote(type) {
+  // ABRE MODAL
+  function handleVote(type) {
+
+    let rating = 1;
+
+    if (type === "good") {
+      rating = 2;
+    }
+
+    if (type === "classic") {
+      rating = 3;
+    }
+
+    setSelectedRating(rating);
+
+    setOpenTagsModal(true);
+  }
+
+  // SALVA REPORT + TAGS
+  async function handleSaveTags(
+    selectedTags
+  ) {
 
     try {
 
       setLoading(true);
-
-      let rating = 1;
-
-      if (type === "good") {
-        rating = 2;
-      }
-
-      if (type === "classic") {
-        rating = 3;
-      }
 
       const sessionId =
         getSessionId();
@@ -55,24 +66,29 @@ export default function ReportButtons({
       const response =
         await createReport(
           spotId,
-          rating,
+          selectedRating,
           sessionId
         );
 
-      setMessage(response.message);
+      if (!response.success) {
 
-      if (response.success) {
-        console.log(response);
-        setCurrentReportId(
-          response.report.id
-        );
+        setMessage(response.message);
 
-        setOpenTagsModal(true);
+        return;
       }
 
-      setTimeout(() => {
-        setMessage("");
-      }, 4000);
+      await saveReportTags(
+        response.report.id,
+        selectedTags
+      );
+
+      setMessage(
+        "Report enviado com sucesso 🌊"
+      );
+
+      setOpenTagsModal(false);
+
+      setSelectedRating(null);
 
     } catch (err) {
 
@@ -85,28 +101,12 @@ export default function ReportButtons({
     } finally {
 
       setLoading(false);
+
+      setTimeout(() => {
+        setMessage("");
+      }, 4000);
     }
   }
-
-  async function handleSaveTags(
-  selectedTags
-) {
-
-  if (!currentReportId) return;
-
-  await saveReportTags(
-    currentReportId,
-    selectedTags
-  );
-   setMessage(
-    "Report enviado com sucesso 🌊");
-
-  setOpenTagsModal(false);
-
-  setCurrentReportId(null);
-}
-
-
 
   return (
 
@@ -153,17 +153,18 @@ export default function ReportButtons({
           {message}
 
         </div>
-        
+
       )}
+
       <ReportTagsModal
-      open={openTagsModal}
-      onClose={() =>
-        setOpenTagsModal(false)
-      }
-      onSave={handleSaveTags}
-/>
+        open={openTagsModal}
+        onClose={() =>
+          setOpenTagsModal(false)
+        }
+        onSave={handleSaveTags}
+      />
 
     </div>
-    
+
   );
 }
