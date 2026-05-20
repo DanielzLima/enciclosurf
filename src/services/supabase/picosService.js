@@ -35,6 +35,7 @@ export async function getPicoBySlug(slug) {
     .from("picos")
     .select("*")
     .eq("slug", slug)
+    .eq("is_active", true)
     .single();
 
   if (error) return null;

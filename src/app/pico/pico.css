@@ -62,3 +62,107 @@
   }
 
 }
+
+/* TAG'S */
+.day-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.day-tag {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
+  backdrop-filter: blur(12px);
+}
+
+.forecast-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.forecast-tag {
+  background: rgba(14, 165, 233, 0.12);
+  border: 1px solid rgba(14, 165, 233, 0.25);
+  color: #38bdf8;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  backdrop-filter: blur(10px);
+}
+
+.report-tags-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.tag-btn {
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.05);
+  color: white;
+  padding: 10px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.tag-btn:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.tag-btn.active {
+  background: #0ea5e9;
+  border-color: #0ea5e9;
+  color: white;
+}
+
+/* BOTAO ENVIAR REPORT */
+
+.submit-report-btn {
+  width: 100%;
+  height: 54px;
+  margin-top: 22px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(
+    135deg,
+    #0ea5e9,
+    #0284c7
+  );
+
+  color: white;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+
+  transition: 0.25s ease;
+}
+
+.submit-report-btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.95;
+}
+
+.submit-report-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.submit-report-btn.success {
+  background: linear-gradient(
+    135deg,
+    #10b981,
+    #059669
+  );
+}

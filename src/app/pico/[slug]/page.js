@@ -4,15 +4,18 @@ import Map from "../../../components/Map";
 import ReportButtons from "../../../components/ReportButtons";
 import "../pico.css";
 import Script from "next/script";
-
+import { getMarineForecast } from "../../../services/forecast/forecastService";
+import { formatWave, getDirectionFull } from "../../../utils/surfFormatters";
 import {
   getTodayReports,
   getYesterdayReports,
 } from "../../../services/supabase/reportsService";
 
-export async function generateMetadata({ params }) {
+export async function generateMetadata({
+      params
+    }) {
 
-  const { slug } =  params;
+  const { slug } = await params;
 
   const pico = await getPicoBySlug(slug);
 
@@ -27,10 +30,10 @@ export async function generateMetadata({ params }) {
   return {
 
     title:
-      `${pico.nome}: Surf, Previsão e Condições do Mar | Enciclosurf`,
+      `${pico.nome}, ${pico.uf}: Surf, Previsão e Condições do Mar | Enciclosurf`,
 
     description:
-      `Veja previsão do mar, swell, vento e reports da comunidade em ${pico.nome}.`,
+      `Veja previsão do mar, swell, vento e reports da comunidade em ${pico.nome}, ${pico.cidade} - ${pico.uf}.`,
 
     openGraph: {
 
@@ -63,9 +66,114 @@ export default async function PicoPage({ params }) {
   // BUSCA PICO
   const pico = await getPicoBySlug(slug);
 
-  if (!pico) {
-    return <h1>Pico não encontrado</h1>;
-  }
+    if (!pico) {
+      return <h1>Pico não encontrado</h1>;
+    }
+
+  const marineForecast =
+    await getMarineForecast(
+      pico.lat,
+      pico.lng
+    );
+
+  // DADOS ATUAIS
+
+    const currentWave =
+      marineForecast?.hourly?.wave_height?.[0] || 0;
+
+    const currentPeriod =
+      marineForecast?.hourly?.wave_period?.[0] || 0;
+
+    const currentDirection =
+      marineForecast?.hourly?.wave_direction?.[0] || 0;
+      
+
+    const direction =
+      getDirectionFull(currentDirection);
+
+      // ENERGIA DO MAR
+
+      const energy =
+        currentWave * currentPeriod;
+
+        const forecastTags = [];
+
+        
+
+        // ENERGIA
+        if (energy >= 20) {
+          forecastTags.push("⚡ Energia alta");
+        }
+
+        // SWELL CONSISTENTE
+        if (currentPeriod >= 12) {
+          forecastTags.push("🌊 Swell consistente");
+        }
+
+        // MAR COM POTENCIAL
+        if (currentWave >= 1.5 && currentPeriod >= 10) {
+          forecastTags.push("🔥 Potencial clássico");
+        }
+
+        // SWELL PEQUENO
+        if (currentWave < 0.7) {
+          forecastTags.push("🔴 Pequeno");
+        }
+
+        // MAR SUBINDO
+        const nextWave =
+          marineForecast?.hourly?.wave_height?.[1] || 0;
+
+        if (nextWave > currentWave) {
+          forecastTags.push("📈 Swell subindo");
+        }
+
+      let energyLabel =
+        "Baixa energia";
+
+      if (energy >= 10) {
+
+        energyLabel =
+          "Média energia";
+      }
+
+      if (energy >= 20) {
+
+        energyLabel =
+          "Alta energia";
+      }
+
+      // DADOS DO GRÁFICO
+
+const forecastData =
+  marineForecast?.hourly?.time
+    ?.slice(0, 24)
+    .map((time, index) => {
+
+      const wave = marineForecast?.hourly?.wave_height?.[index] ?? 0;
+      const period = marineForecast?.hourly?.wave_period?.[index] ?? 0;
+      const windWave = marineForecast?.hourly?.wind_wave_height?.[index] ?? 0;
+      const direction = marineForecast?.hourly?.wave_direction?.[index] ?? 0;
+      
+      const power = wave * period;
+
+      return {
+        hora: new Date(time).toLocaleTimeString("pt-BR", {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+
+        swell: Number(wave ?? 0),
+        energia: Number(power ?? 0),
+        periodo: Number(period ?? 0),
+        direcao: Number(direction ?? 0),
+        vento: windWave,
+
+      };
+    }) || [];
+  
+  
+    // SCHEMA SEO
   const schema = {
 
   "@context": "https://schema.org",
@@ -184,14 +292,40 @@ const flatPercent =
       )
     : 0;
 
-  // MOCK TEMPORÁRIO
-  const forecastMock = [
-    { dia: "Seg", onda: 1.2 },
-    { dia: "Ter", onda: 1.5 },
-    { dia: "Qua", onda: 1.8 },
-    { dia: "Qui", onda: 1.3 },
-    { dia: "Sex", onda: 1.0 },
-  ];
+    // TAG STATUS
+
+  const dayTags = [];
+     
+      // STATUS   TAG  
+
+    if (todayStatus.includes("Clássico")) {
+      dayTags.push("🔥 Clássico");
+    }
+
+    if (todayStatus.includes("Boas")) {
+      dayTags.push("🟡 Boas condições");
+    }
+
+    if (todayStatus.includes("Flat")) {
+      dayTags.push("🔴 Flat");
+    }
+
+    // ENERGIA TAG
+
+    if (energy >= 20) {
+  dayTags.push("⚡ Mar pesado");
+    }
+
+    if (energy >= 10 && energy < 20) {
+      dayTags.push("🌊 Swell sólido");
+    }
+        
+    // PERIODO
+      if (currentPeriod >= 12) {
+      dayTags.push("🧼 Linhas perfeitas");
+    }
+
+    
 
 return (
   <>
@@ -221,7 +355,7 @@ return (
       <h1>{pico.nome}</h1>
 
       <p className="pico-location">
-        Pernambuco • Brasil
+          {pico.cidade}, {pico.uf} • {pico.pais}
       </p>
 
     </div>
@@ -396,27 +530,49 @@ return (
       <h2>Previsão do Mar</h2>
 
       <p>
-        Condições previstas para os próximos dias
+        Janela prevista para as próximas 24h
       </p>
+      <div className="forecast-tags">
+        {forecastTags.map((tag) => (
+          <span
+            key={tag}
+            className="forecast-tag"
+          >
+            {tag}
+          </span>
+          
+        ))}
+
+        
+      </div>
     </div>
 
     <div className="forecast-badges">
 
-      <span>🌊 Swell Sul</span>
+        <span>
+          🌊 {currentWave}m
+        </span>
 
-      <span>💨 Offshore</span>
+        <span>
+          ⏱️ {currentPeriod}s
+        </span>
 
-      <span>⚡ Média energia</span>
+        <span>
+          🧭  {direction.short} - {direction.full}
+        </span>
 
-    </div>
+        <span>
+          ⚡ {energyLabel}
+        </span>
 
+      </div>
   </div>
 
   <div className="forecast-grid">
 
     <div className="forecast-chart-card">
 
-      <ForecastChart data={forecastMock} />
+      <ForecastChart data={forecastData} />
 
     </div>
 

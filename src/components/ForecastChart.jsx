@@ -6,40 +6,53 @@ import {
   Line,
   XAxis,
   YAxis,
-  Tooltip
+  Tooltip,
 } from "recharts";
+
+import { formatWave, getDirectionFull } from "../utils/surfFormatters";
 
 export default function ForecastChart({ data }) {
   return (
-    <div style={{ marginTop: "20px" }}>
+    <ResponsiveContainer width="100%" height={220}>
+      <LineChart data={data}>
 
-      <h3>Previsão de Ondas</h3>
+        <XAxis dataKey="hora" />
+        <YAxis />
 
-      <div className="chart-wrapper">
+        <Tooltip
+          content={({ active, payload }) => {
+            if (!active || !payload?.length) return null;
 
-        <ResponsiveContainer width="100%" height={220}>
+            const d = payload[0].payload;
 
-          <LineChart data={data}>
+            const swell = Number(d.swell ?? 0);
+            const energia = Number(d.energia ?? 0);
+            const periodo = Number(d.periodo ?? 0);
+            const direcao = Number(d.direcao ?? 0);
 
-            <XAxis dataKey="dia" />
+            const dir = getDirectionFull(direcao);
 
-            <YAxis />
+            return (
+              <div className="tooltip">
+                <p>
+                  🌊 Swell: {formatWave(swell)} ({swell.toFixed(2)}m)
+                </p>
+                <p>⚡ Energia: {energia.toFixed(1)}</p>
+                <p>⏱️ Período: {periodo}s</p>
+                <p>🧭 Direção: {dir.short} - {dir.full}</p>
+              </div>
+            );
+          }}
+        />
 
-            <Tooltip />
+        <Line
+          type="monotone"
+          dataKey="swell"
+          stroke="#0ea5e9"
+          strokeWidth={3}
+        />
 
-            <Line
-              type="monotone"
-              dataKey="onda"
-              stroke="#0ea5e9"
-              strokeWidth={3}
-            />
-
-          </LineChart>
-
-        </ResponsiveContainer>
-
-      </div>
-
-    </div>
+      </LineChart>
+    </ResponsiveContainer>
   );
 }

@@ -38,6 +38,26 @@ Criar uma plataforma colaborativa onde usuários possam:
 * gerar dados históricos e inteligência de surf
 
 ---
+# 🌊 Inteligência Colaborativa
+
+O EncicloSurf utiliza reports da comunidade em tempo real para gerar indicadores dinâmicos das condições do mar.
+
+Os usuários podem:
+
+- avaliar o pico
+- adicionar características da sessão
+- informar condições específicas
+- alimentar tendências do mar em tempo real
+
+As informações são processadas para gerar:
+
+- score da comunidade
+- tendência do pico
+- condições temporais
+- tags inteligentes
+- leitura coletiva do mar
+
+---
 
 # ⚙️ Tecnologias
 
@@ -58,6 +78,21 @@ Criar uma plataforma colaborativa onde usuários possam:
 * Mobile-first
 * Estrutura escalável baseada em dados
 * Session-based interactions (sem login inicialmente)
+
+---
+# 🧠 Arquitetura de Dados
+
+A plataforma foi estruturada com foco em escalabilidade e evolução contínua.
+
+Atualmente utiliza:
+
+- Supabase
+- PostgreSQL relacional
+- Session-based interactions
+- Services layer
+- Component-driven architecture
+- Dynamic routes
+- Real-time oriented structure
 
 ---
 

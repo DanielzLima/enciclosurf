@@ -19,23 +19,25 @@ export async function createReport(
     .gte("created_at", today.toISOString());
 
   // limite
-  if (existing && existing.length >= 2) {
+  // if (existing && existing.length >= 2) {
 
-    return {
-      success: false,
-      message:
-        "Você já enviou 2 reports hoje 🌊"
-    };
-  }
+  //   return {
+  //     success: false,
+  //     message:
+  //       "Você já enviou 2 reports hoje 🌊"
+  //   };
+  // }
 
   // cria report
-  const { error } = await supabase
-    .from("reports")
-    .insert({
-      spot_id: spotId,
-      rating,
-      session_id: sessionId
-    });
+    const { data, error } = await supabase
+      .from("reports")
+      .insert({
+        spot_id: spotId,
+        rating,
+        session_id: sessionId
+      })
+      .select()
+      .single();
 
   if (error) {
 
@@ -50,6 +52,7 @@ export async function createReport(
 
   return {
     success: true,
+    report: data,
     message:
       "Obrigado por colaborar para o crescimento da plataforma 🌊"
   };

@@ -10,6 +10,13 @@ import {
   getSessionId
 } from "../utils/session";
 
+import ReportTagsModal
+  from "./ReportTagsModal";
+
+import {
+  saveReportTags
+} from "../services/supabase/tagsService";
+
 export default function ReportButtons({
   spotId
 }) {
@@ -19,6 +26,12 @@ export default function ReportButtons({
 
   const [message, setMessage] =
     useState("");
+
+  const [openTagsModal, setOpenTagsModal] =
+  useState(false);
+
+  const [currentReportId, setCurrentReportId] =
+  useState(null);
 
   async function handleVote(type) {
 
@@ -48,6 +61,15 @@ export default function ReportButtons({
 
       setMessage(response.message);
 
+      if (response.success) {
+        console.log(response);
+        setCurrentReportId(
+          response.report.id
+        );
+
+        setOpenTagsModal(true);
+      }
+
       setTimeout(() => {
         setMessage("");
       }, 4000);
@@ -65,6 +87,26 @@ export default function ReportButtons({
       setLoading(false);
     }
   }
+
+  async function handleSaveTags(
+  selectedTags
+) {
+
+  if (!currentReportId) return;
+
+  await saveReportTags(
+    currentReportId,
+    selectedTags
+  );
+   setMessage(
+    "Report enviado com sucesso 🌊");
+
+  setOpenTagsModal(false);
+
+  setCurrentReportId(null);
+}
+
+
 
   return (
 
@@ -111,8 +153,17 @@ export default function ReportButtons({
           {message}
 
         </div>
+        
       )}
+      <ReportTagsModal
+      open={openTagsModal}
+      onClose={() =>
+        setOpenTagsModal(false)
+      }
+      onSave={handleSaveTags}
+/>
 
     </div>
+    
   );
 }
