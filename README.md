@@ -1,170 +1,228 @@
 # 🌊 EncicloSurf
 
-Plataforma colaborativa de surf desenvolvida para conectar comunidade, dados em tempo real e economia local em um único ecossistema.
+Plataforma colaborativa de surf orientada por dados em tempo real, construída para conectar surfistas, condições do mar e economia local em um único ecossistema digital.
+
+🔗 https://www.encilosurf.com.br
 
 ---
 
 # 🚀 Visão do Projeto
 
-O EncicloSurf nasce com a proposta de criar uma experiência parecida com:
+O EncicloSurf nasceu com a proposta de criar uma experiência inspirada em:
 
-* Surfline + Waze do Surf + Comunidade Local
+* Surfline
+* Waze do Surf
+* Comunidade Local
+* Inteligência Coletiva
 
-A ideia é permitir que surfistas compartilhem condições reais do mar em tempo real, criando inteligência coletiva sobre os picos do Brasil.
+A plataforma transforma experiências reais de surfistas em dados colaborativos sobre condições do mar, comportamento dos picos e tendências das sessões.
 
-Além das condições do mar, a plataforma também será um hub de:
-
-* turismo
-* viagens
-* eventos
-* experiências
-* hospedagens
-* lifestyle
-* economia local
-
-Tudo integrado em torno de cada pico de surf.
+Mais do que um guia de praias, o objetivo é construir uma infraestrutura social e informacional para o surf brasileiro.
 
 ---
 
 # 🎯 Objetivo
 
-Criar uma plataforma colaborativa onde usuários possam:
+Criar uma plataforma onde usuários possam:
 
 * visualizar condições reais do mar
-* acessar informações dos picos
+* compartilhar reports em tempo real
+* descobrir picos e viagens
 * acompanhar tendências das ondas
-* descobrir viagens e experiências
-* contribuir com reports da comunidade
-* gerar dados históricos e inteligência de surf
+* construir reputação dentro da comunidade
+* gerar inteligência coletiva sobre o mar
+* conectar surfistas, turismo e negócios locais
 
 ---
+
 # 🌊 Inteligência Colaborativa
 
-O EncicloSurf utiliza reports da comunidade em tempo real para gerar indicadores dinâmicos das condições do mar.
+Cada interação da comunidade alimenta o ecossistema de dados da plataforma.
 
 Os usuários podem:
 
-- avaliar o pico
-- adicionar características da sessão
-- informar condições específicas
-- alimentar tendências do mar em tempo real
+* avaliar condições do pico
+* adicionar tags da sessão
+* apoiar perfis da comunidade
+* compartilhar experiências reais
+* contribuir para leitura coletiva do mar
 
-As informações são processadas para gerar:
+As informações geram:
 
-- score da comunidade
-- tendência do pico
-- condições temporais
-- tags inteligentes
-- leitura coletiva do mar
+* score colaborativo
+* tendências em tempo real
+* comportamento histórico dos picos
+* análise contextual das sessões
+* reputação da comunidade
 
 ---
 
-# ⚙️ Tecnologias
+# 🔥 Evolução Recente do Projeto
+
+Nas últimas atualizações o EncicloSurf passou por uma grande evolução estrutural e social.
+
+## ✅ Autenticação & Usuários
+
+* Login integrado ao banco de dados
+* Login com Google OAuth
+* Persistência de sessão
+* Estrutura relacional de usuários
+* Onboarding funcional
+* Sistema de edição de perfil
+* Compartilhamento de perfil via Google API
+
+---
+
+## ✅ Sistema Social
+
+* Sistema de APOIO entre surfistas
+* Perfis públicos
+* Reputação colaborativa
+* Sistema de tags de perfil
+* Tags avaliativas dos picos
+* Interações sociais orientadas por comunidade
+
+---
+
+## ✅ Reports & Dados em Tempo Real
+
+* Reports colaborativos
+* Score coletivo das condições
+* Tendência do pico em tempo real
+* Sistema anti-spam via session_id
+* Tags dinâmicas de sessão
+* Peso contextual para reports recentes
+* Estrutura orientada a dados em tempo real
+
+---
+
+# ⚙️ Stack Tecnológica
 
 ## Frontend
 
 * Next.js (App Router)
 * React
-* CSS Modules / Global CSS
+* CSS Modules
+* Mobile-first architecture
+
+---
 
 ## Backend
 
 * Supabase
 * PostgreSQL
-
-## Arquitetura
-
-* Componentização
-* Mobile-first
-* Estrutura escalável baseada em dados
-* Session-based interactions (sem login inicialmente)
-
----
-# 🧠 Arquitetura de Dados
-
-A plataforma foi estruturada com foco em escalabilidade e evolução contínua.
-
-Atualmente utiliza:
-
-- Supabase
-- PostgreSQL relacional
-- Session-based interactions
-- Services layer
-- Component-driven architecture
-- Dynamic routes
-- Real-time oriented structure
+* Row Level Security (RLS)
+* OAuth Authentication
 
 ---
 
-# 🔥 Funcionalidades Atuais
+## APIs & Integrações
+
+* Google OAuth
+* Google Share API
+* Supabase Realtime
+
+---
+
+# 🧠 Arquitetura
+
+O projeto foi estruturado visando evolução contínua e escalabilidade.
+
+## Estrutura atual
+
+* Component-driven architecture
+* Services layer
+* Dynamic routes
+* Real-time oriented structure
+* Relational database modeling
+* Session persistence
+* Social interaction system
+* Modular frontend organization
+
+---
+
+# 📍 Funcionalidades Atuais
 
 ## 🌊 Sistema de Reports
 
 * ✅ Reports em tempo real
-* ✅ Sistema anti-spam via session_id
+* ✅ Score colaborativo
+* ✅ Tendência do pico
+* ✅ Tags de sessão
+* ✅ Sistema anti-spam
 * ✅ Limite diário de reports
-* ✅ Score da comunidade
-* ✅ Tendência do pico (melhorando / piorando)
-* ✅ Distribuição de condições:
-
-  * Flat
-  * Boas
-  * Clássico
-
-## 📍 Página Dinâmica de Pico
-
-* ✅ Rotas dinâmicas (`/pico/[slug]`)
-* ✅ Hero responsivo
-* ✅ Dashboard do pico
-* ✅ Mapa integrado
-* ✅ Gráfico de swell
-* ✅ Tábua de maré
-* ✅ Informações do pico
-
-## 🔍 Sistema de Busca
-
-* ✅ Busca dinâmica
-* ✅ Autocomplete
-* ✅ Navegação inteligente entre picos
 
 ---
 
-# 🧠 Em Desenvolvimento
+## 👤 Sistema de Usuários
 
-## Fase Atual — Feed AO VIVO
+* ✅ Login com Google
+* ✅ Login persistente
+* ✅ Perfil público
+* ✅ Edição de perfil
+* ✅ Sistema de APOIO
+* ✅ Compartilhamento de perfil
 
-* 🚧 Feed de reports em tempo real
-* 🚧 Comentários opcionais pós-report
-* 🚧 Usuários anônimos via sessão
-* 🚧 Tempo relativo ("2 min atrás")
-* 🚧 Score inteligente do pico
-* 🚧 Peso maior para reports recentes
+---
 
-## Próximas Features
+## 📍 Página Dinâmica de Pico
 
-* 🌊 Histórico de condições
-* 📈 Gráficos avançados
-* 🗺️ Heatmap de crowd
+* ✅ Rotas dinâmicas
+* ✅ Dashboard contextual
+* ✅ Hero responsivo
+* ✅ Informações do pico
+* ✅ Mapa integrado
+* ✅ Gráfico de swell
+* ✅ Tábua de maré
+
+---
+
+## 🔍 Busca Inteligente
+
+* ✅ Busca dinâmica
+* ✅ Autocomplete
+* ✅ Navegação entre picos
+
+---
+
+# 🚧 Roadmap
+
+## Em desenvolvimento
+
+* 🚧 Feed AO VIVO
+* 🚧 Histórico inteligente de sessões
+* 🚧 Sistema de crowd
+* 🚧 Ranking de condições
+* 🚧 Comentários em reports
+* 🚧 Sistema avançado de reputação
+
+---
+
+## Próximas etapas
+
+* 🌊 Heatmap de crowd
+* 📈 Analytics avançado
+* 🗺️ Mapas inteligentes
 * 📸 Feed da comunidade
 * ✈️ Surf trips
-* 🎉 Eventos
 * 🏨 Hospedagens
+* 🎉 Eventos
 * 🏄 Marketplace local
 
 ---
 
 # 📱 Filosofia Mobile-First
 
-O EncicloSurf está sendo desenvolvido com foco em:
+O EncicloSurf está sendo desenvolvido pensando em uso real durante sessões de surf.
 
-* performance
-* simplicidade
-* navegação rápida
+O foco principal da experiência é:
+
+* velocidade
+* leitura rápida
+* acessibilidade
+* navegação intuitiva
+* conteúdo contextual
 * experiência mobile
-* conteúdo acima da dobra
-* consumo rápido de informação
-
-Estrutura pensada para uso real na praia e durante sessões.
 
 ---
 
@@ -172,21 +230,29 @@ Estrutura pensada para uso real na praia e durante sessões.
 
 ```bash
 app/
- ├── pico/[slug]/page.js
+ ├── pico/[slug]/
+ ├── perfil/[username]/
+ ├── login/
+ ├── onboarding/
  ├── components/
  ├── services/
+ ├── hooks/
  ├── utils/
 
 components/
  ├── Header.jsx
  ├── Hero.jsx
- ├── ReportButtons.jsx
  ├── CommunityFeed.jsx
  ├── ForecastChart.jsx
- ├── Map.jsx
+ ├── ReportButtons.jsx
+ ├── SupportButton.jsx
+ ├── ProfileCard.jsx
 
 services/
  ├── supabase/
+ ├── auth/
+ ├── reports/
+ ├── users/
 ```
 
 # ▶️ Como Rodar o Projeto
@@ -206,13 +272,13 @@ http://localhost:3000
 
 # 💡 Visão de Longo Prazo
 
-Transformar o EncicloSurf em uma plataforma colaborativa capaz de:
+Transformar o EncicloSurf em:
 
-* gerar inteligência coletiva sobre o mar
-* fomentar turismo regional
-* fortalecer comunidades locais
-* conectar surfistas e negócios
-* criar o maior banco colaborativo de condições de surf do Brasil
+* a maior plataforma colaborativa de surf do Brasil
+* uma infraestrutura social orientada por dados
+* um hub de turismo e experiências
+* uma rede de inteligência coletiva sobre o mar
+* um ecossistema conectado entre surfistas e economia local
 
 ---
 
@@ -220,4 +286,4 @@ Transformar o EncicloSurf em uma plataforma colaborativa capaz de:
 
 Daniel Lima
 
-Desenvolvedor Frontend em evolução construindo projetos reais focados em produto, comunidade e experiência do usuário.
+Frontend Developer focado em produtos digitais, experiências colaborativas e aplicações orientadas por dados em tempo real.

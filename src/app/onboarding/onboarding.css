@@ -1,0 +1,177 @@
+/* src/app/onboarding/onboarding.css */
+.ob-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 4rem;
+}
+
+/* progresso */
+.ob-progress {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 2rem;
+}
+.ob-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e0e0e0;
+  transition: background 0.3s;
+}
+.ob-dot.active { background: #0ea5e9; }
+.ob-dot.done   { background: #0ea5e9; opacity: 0.4; }
+
+/* entrada animada — aplicada em cada etapa */
+.ob-enter {
+  animation: obEnter 0.4s ease both;
+}
+@keyframes obEnter {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.ob-logo {
+  width: 52px;
+  border-radius: 12px;
+  margin-bottom: 1.2rem;
+}
+
+.ob-container h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  line-height: 1.3;
+}
+
+.ob-sub {
+  font-size: 0.95rem;
+  color: #666;
+  margin-bottom: 1.8rem;
+  line-height: 1.5;
+}
+
+.ob-counter {
+  font-size: 0.82rem;
+  color: #999;
+}
+
+/* categorias */
+.ob-cat { margin-bottom: 1.2rem; }
+.ob-cat-label {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #aaa;
+  margin-bottom: 0.5rem;
+}
+
+/* tags */
+.ob-tags { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+
+.ob-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.9rem;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 999px;
+  background: white;
+  cursor: pointer;
+  font-size: 0.88rem;
+  transition: border-color 0.15s, background 0.15s, transform 0.12s;
+  animation: tagFloat 0.35s ease both;
+}
+@keyframes tagFloat {
+  from { opacity: 0; transform: translateY(6px) scale(0.95); }
+  to   { opacity: 1; transform: none; }
+}
+.ob-tag:hover { border-color: #aaa; transform: translateY(-1px); }
+
+.ob-tag-sec {
+  border-color: #8b5cf6;
+  background: #ede9fe;
+  color: #6d28d9;
+  font-weight: 600;
+}
+
+.ob-tag-disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* badges de confirmação */
+.ob-badge-pri {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: #e0f2fe;
+  color: #0369a1;
+  border: 1.5px solid #0ea5e9;
+  margin-bottom: 1rem;
+  animation: tagFloat 0.3s ease both;
+}
+.ob-badge-sec {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: #ede9fe;
+  color: #6d28d9;
+  border: 1.5px solid #8b5cf6;
+  animation: tagFloat 0.3s ease both;
+}
+
+/* botões */
+.ob-btn {
+  width: 100%;
+  padding: 0.85rem;
+  background: #0ea5e9;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 1.5rem;
+  transition: background 0.15s, transform 0.1s;
+}
+.ob-btn:hover   { background: #0284c7; transform: translateY(-1px); }
+.ob-btn:disabled { background: #bbb; cursor: not-allowed; transform: none; }
+
+.ob-skip {
+  display: block;
+  width: 100%;
+  margin-top: 0.6rem;
+  padding: 0.5rem;
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.ob-skip:hover { color: #888; }
+
+/* tela final */
+.ob-finish {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+.ob-finish-icon { font-size: 3rem; margin-bottom: 1rem; }
+.ob-finish h2   { font-size: 1.3rem; font-weight: 600; margin-bottom: 0.5rem; }
+.ob-finish p    { color: #666; font-size: 0.9rem; margin-bottom: 1.2rem; }
+.ob-finish-tags {
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}

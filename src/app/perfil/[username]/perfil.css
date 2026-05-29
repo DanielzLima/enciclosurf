@@ -1,0 +1,203 @@
+.pf-page {
+  min-height: 100vh;
+  background: #f5f5f5;
+  padding: 2rem 1rem 4rem;
+}
+
+.pf-card {
+  background: white;
+  border: 0.5px solid #e5e5e5;
+  border-radius: 16px;
+  max-width: 560px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.pf-cover {
+  height: 80px;
+  background: #0ea5e9;
+  opacity: 0.2;
+}
+
+.pf-body {
+  padding: 0 1.5rem 1.75rem;
+}
+
+.pf-top-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-top: -38px;
+  margin-bottom: 1rem;
+}
+
+.pf-avatar {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  border: 3px solid white;
+  object-fit: cover;
+}
+
+.pf-avatar-fallback {
+  background: #0ea5e9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 500;
+  color: white;
+}
+
+.pf-edit-btn {
+  font-size: 12px;
+  color: #666;
+  border: 0.5px solid #ddd;
+  border-radius: 8px;
+  padding: 5px 12px;
+  text-decoration: none;
+  background: white;
+}
+
+.pf-edit-btn:hover { background: #f5f5f5; }
+
+.pf-name {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.pf-username {
+  font-size: 13px;
+  color: #999;
+  margin-bottom: 0.6rem;
+}
+
+.pf-bio {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+}
+
+.pf-divider {
+  height: 0.5px;
+  background: #eee;
+  margin: 1.25rem 0;
+}
+
+.pf-sec-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #bbb;
+  margin-bottom: 0.6rem;
+}
+
+/* selos */
+.pf-selos { margin-bottom: 0; }
+
+.pf-selos-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0;
+}
+
+.pf-selo-pri {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  background: #0ea5e9;
+  color: white;
+}
+
+.pf-selo-sec {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 13px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  background: #ede9fe;
+  color: #6d28d9;
+  border: 0.5px solid #c4b5fd;
+}
+
+/* apoio */
+.pf-apoio {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f9f9f9;
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  margin-top: 1.25rem;
+}
+
+.pf-apoio-count {
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1;
+  color: #111;
+}
+
+.pf-apoio-desc {
+  font-size: 12px;
+  color: #999;
+  margin-top: 2px;
+}
+
+.pf-apoio-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  background: #0ea5e9;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.pf-apoio-btn:hover { background: #0284c7; }
+
+.pf-apoio-btn.apoiado {
+  background: white;
+  color: #0ea5e9;
+  border: 1.5px solid #0ea5e9;
+}
+
+/* contato */
+.pf-contato {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.pf-contato-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  color: #555;
+  padding: 5px 11px;
+  border: 0.5px solid #e5e5e5;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.pf-contato-item:hover {
+  border-color: #aaa;
+  color: #111;
+}

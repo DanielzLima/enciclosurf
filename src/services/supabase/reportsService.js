@@ -1,4 +1,6 @@
-import { supabase } from "./client";
+import { createClient } from "@/lib/supabase/client";
+
+const supabase = createClient();
 
 export async function createReport(
   spotId,
@@ -10,7 +12,6 @@ export async function createReport(
 
   today.setHours(0,0,0,0);
 
-  // verifica reports hoje
   const { data: existing } = await supabase
     .from("reports")
     .select("*")
@@ -18,26 +19,15 @@ export async function createReport(
     .eq("session_id", sessionId)
     .gte("created_at", today.toISOString());
 
-  // limite
-  // if (existing && existing.length >= 2) {
-
-  //   return {
-  //     success: false,
-  //     message:
-  //       "Você já enviou 2 reports hoje 🌊"
-  //   };
-  // }
-
-  // cria report
-    const { data, error } = await supabase
-      .from("reports")
-      .insert({
-        spot_id: spotId,
-        rating,
-        session_id: sessionId
-      })
-      .select()
-      .single();
+  const { data, error } = await supabase
+    .from("reports")
+    .insert({
+      spot_id: spotId,
+      rating,
+      session_id: sessionId
+    })
+    .select()
+    .single();
 
   if (error) {
 
@@ -54,7 +44,7 @@ export async function createReport(
     success: true,
     report: data,
     message:
-      "Obrigado por colaborar para o crescimento da plataforma 🌊"
+      "Obrigado por colaborar 🌊"
   };
 }
 
