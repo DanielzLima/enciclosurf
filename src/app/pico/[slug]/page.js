@@ -4,12 +4,9 @@ import Map from "../../../components/Map";
 import ReportButtons from "../../../components/ReportButtons";
 import "../pico.css";
 import Script from "next/script";
-import { getMarineForecast } from "../../../services/forecast/forecastService";
+import { getMarineForecast, getTideData } from "../../../services/forecast/forecastService";
 import { formatWave, getDirectionFull } from "../../../utils/surfFormatters";
-import {
-  getTodayReports,
-  getYesterdayReports,
-} from "../../../services/supabase/reportsService";
+import { getTodayReports, getYesterdayReports } from "../../../services/supabase/reportsService";
 
 export async function generateMetadata({
       params
@@ -77,6 +74,8 @@ export default async function PicoPage({ params }) {
     );
 
   // DADOS ATUAIS
+
+    const tideData = await getTideData(pico.uf);
 
     const currentWave =
       marineForecast?.hourly?.wave_height?.[0] || 0;
@@ -147,30 +146,40 @@ export default async function PicoPage({ params }) {
 
 const forecastData =
   marineForecast?.hourly?.time
-    ?.slice(0, 24)
+    ?.slice(0, 168)
     .map((time, index) => {
-
       const wave = marineForecast?.hourly?.wave_height?.[index] ?? 0;
       const period = marineForecast?.hourly?.wave_period?.[index] ?? 0;
-      const windWave = marineForecast?.hourly?.wind_wave_height?.[index] ?? 0;
       const direction = marineForecast?.hourly?.wave_direction?.[index] ?? 0;
-      
-      const power = wave * period;
+      const windSpeed = marineForecast?.hourly?.wind_speed?.[index] ?? null;
+      const windDir = marineForecast?.hourly?.wind_direction?.[index] ?? 0;
+
+      const dt = new Date(time);
+      const dataCompleta = dt.toLocaleString("pt-BR", {
+        day: "2-digit",
+        month: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+      }).replace(",", "");
 
       return {
-        hora: new Date(time).toLocaleTimeString("pt-BR", {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-
-        swell: Number(wave ?? 0),
-        energia: Number(power ?? 0),
-        periodo: Number(period ?? 0),
-        direcao: Number(direction ?? 0),
-        vento: windWave,
-
+        hora: dt.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }),
+        dataCompleta,
+        swell: Number(wave),
+        periodo: Number(period),
+        direcao: Number(direction),
+        windSpeed: windSpeed ? Math.round(windSpeed) : null,
+        windDir: Number(windDir),
       };
     }) || [];
+
+      // VENTO ATUAL
+      const currentWindSpeed = marineForecast?.hourly?.wind_speed?.[0] ?? null;
+      const currentWindDir = marineForecast?.hourly?.wind_direction?.[0] ?? 0;
+      const windDirection = getDirectionFull(currentWindDir);
+      const windLabel = currentWindSpeed
+        ? `${Math.round(currentWindSpeed)} km/h ${windDirection.short}`
+        : "Sem dados";
   
   
     // SCHEMA SEO
@@ -424,19 +433,19 @@ return (
 
               <div className="status-card">
                 🌊 {todayStatus}
-              </div>
+                </div>
 
-              <div className="status-card">
-                📈 {trend}
-              </div>
+                <div className="status-card">
+                  📈 {trend}
+                </div>
 
-              <div className="status-card">
-                💨 Offshore
-              </div>
+                <div className="status-card">
+                  💨 {windLabel}
+                </div>
 
-              <div className="status-card">
-                👥 Crowd médio
-              </div>
+                <div className="status-card">
+                  🌊 {currentWave.toFixed(1)}m · {currentPeriod}s · {direction.short}
+          </div>
 
               <div className="community-score">
 
@@ -576,30 +585,32 @@ return (
 
     </div>
 
-    <div className="forecast-info-card">
-
+      <div className="forecast-info-card">
       <h3>🌊 Tábua de Maré</h3>
-
       <div className="tide-list">
-
-        <div>
-          <strong>06:12</strong>
-          <span>Maré Alta</span>
-        </div>
-
-        <div>
-          <strong>12:48</strong>
-          <span>Maré Baixa</span>
-        </div>
-
-        <div>
-          <strong>18:20</strong>
-          <span>Maré Alta</span>
-        </div>
-
+        {tideData.map((tide, i) => {
+          const dt = new Date(tide.time);
+         const hora = dt.toLocaleTimeString("pt-BR", {
+            hour: "2-digit",
+            minute: "2-digit",
+            timeZone: "America/Recife", 
+           });
+          const tipo = tide.type === "high" ? "⬆️ Maré Alta" : "⬇️ Maré Baixa";
+          const altura = tide.height ? ` · ${tide.height.toFixed(1)}m` : "";
+          return (
+            <div key={i}>
+              <strong>{hora}</strong>
+              <span>{tipo}{altura}</span>
+            </div>
+          );
+        })}
       </div>
-
+      <p style={{ fontSize: 11, color: "var(--muted)", marginTop: 12 }}>
+        {process.env.STORMGLASS_API_KEY ? "Dados reais via Stormglass" : "Dados estimados"}
+      </p>
     </div>
+
+
 
   </div>
 
