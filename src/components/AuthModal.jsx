@@ -8,24 +8,25 @@ export default function AuthModal({ onClose }) {
   const [error, setError] = useState(null);
 
   async function handleGoogleLogin() {
-    setLoading(true);
-    setError(null);
+  setLoading(true);
+  setError(null);
 
-    const supabase = createClient();
+  const supabase = createClient();
 
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || window.location.origin;
 
-    if (error) {
-      setError("Erro ao conectar com Google. Tente novamente.");
-      setLoading(false);
-    }
-    // se deu certo, o Google redireciona automaticamente — não precisa fazer nada aqui
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: `${siteUrl}/auth/callback`,
+    },
+  });
+
+  if (error) {
+    setError("Erro ao conectar com Google. Tente novamente.");
+    setLoading(false);
   }
+}
 
   return (
     <div className="auth-modal-overlay" onClick={onClose}>

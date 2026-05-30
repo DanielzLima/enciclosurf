@@ -5,6 +5,9 @@ export async function GET(request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
 
+  // usa a variável de ambiente se disponível, senão usa o origin da request
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || origin;
+
   if (code) {
     const supabase = await createClient();
     const { data, error } = await supabase.auth.exchangeCodeForSession(code);
@@ -16,15 +19,13 @@ export async function GET(request) {
         .eq("id", data.user.id)
         .single();
 
-      // sem username = primeiro acesso = onboarding
       if (!profile?.username || !profile?.primary_role) {
-        return NextResponse.redirect(`${origin}/onboarding`);
+        return NextResponse.redirect(`${siteUrl}/onboarding`);
       }
 
-      // já tem perfil completo = vai direto pro perfil
-      return NextResponse.redirect(`${origin}/perfil/${profile.username}`);
+      return NextResponse.redirect(`${siteUrl}/perfil/${profile.username}`);
     }
   }
 
-  return NextResponse.redirect(`${origin}/?error=auth`);
+  return NextResponse.redirect(`${siteUrl}/?error=auth`);
 }
