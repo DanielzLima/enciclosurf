@@ -56,28 +56,53 @@ export async function getTideData(uf) {
   const STORMGLASS_KEY = process.env.STORMGLASS_API_KEY;
 
   if (!STORMGLASS_KEY) {
-    console.warn("Stormglass key não configurada — usando dados mock");
     return getMockTide();
   }
 
   const coords = UF_COORDS[uf?.toLowerCase()] || UF_COORDS.pe;
 
-  // Busca maré para o dia atual (meia noite até meia noite)
-  const start = new Date();
-  start.setHours(0, 0, 0, 0);
-  const end = new Date();
-  end.setHours(23, 59, 59, 0);
+  // Pega meia-noite de hoje até meia-noite de amanhã em Brasília
+  const agora = new Date();
+  
+  // Início: meia-noite de hoje no horário de Brasília (UTC-3)
+  const inicio = new Date(agora);
+  inicio.setHours(agora.getHours() - 3); // converte para UTC-3
+  inicio.setHours(0, 0, 0, 0);
+  inicio.setHours(inicio.getHours() + 3); // volta para UTC para enviar à API
+
+  // Fim: meia-noite de amanhã
+  const fim = new Date(inicio);
+  fim.setDate(fim.getDate() + 1);
 
   try {
-    const url = `https://api.stormglass.io/v2/tide/extremes/point?lat=${coords.lat}&lng=${coords.lng}&start=${start.toISOString()}&end=${end.toISOString()}`;
+    const url = `https://api.stormglass.io/v2/tide/extremes/point?lat=${coords.lat}&lng=${coords.lng}&start=${inicio.toISOString()}&end=${fim.toISOString()}`;
 
     const res = await fetch(url, {
       headers: { Authorization: STORMGLASS_KEY },
-      next: { revalidate: 86400 }, // cache 24h
+      next: { revalidate: 43200 }, // cache 12h
     });
 
     const data = await res.json();
-    return data?.data || getMockTide();
+
+    // Filtra só registros de hoje no horário de Brasília
+    const hoje = new Date().toLocaleDateString("pt-BR", {
+      timeZone: "America/Recife",
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+
+    const dadosFiltrados = (data?.data || []).filter((tide) => {
+      const dataMaré = new Date(tide.time).toLocaleDateString("pt-BR", {
+        timeZone: "America/Recife",
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      });
+      return dataMaré === hoje;
+    });
+
+    return dadosFiltrados.length > 0 ? dadosFiltrados : getMockTide();
 
   } catch (error) {
     console.error("Erro maré:", error);
