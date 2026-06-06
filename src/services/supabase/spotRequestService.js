@@ -1,49 +1,30 @@
-import { supabase } from "./client";
+import { createClient } from "@/lib/supabase/client";
 
 export async function createSpotRequest(data) {
+  const supabase = createClient();
 
-  // BUSCAR REQUESTS
   const { data: existing } = await supabase
     .from("spot_requests")
     .select("*");
 
-  // VERIFICAR DUPLICIDADE
   const duplicated = existing?.find((spot) => {
-
-    const distance =
-      getDistanceFromLatLonInKm(
-        spot.lat,
-        spot.lng,
-        data.lat,
-        data.lng
-      );
-
-    return distance < 0.4;  // --> 400m
+    const distance = getDistanceFromLatLonInKm(
+      spot.lat, spot.lng, data.lat, data.lng
+    );
+    return distance < 0.4;
   });
 
-  // SE JÁ EXISTE
   if (duplicated) {
-
-    // SOMAR VOTO
-    const { error: voteError } = await supabase
+    // incrementa support_count no request existente
+    await supabase
       .from("spot_requests")
-      .update({
-        votes: (duplicated.votes || 1) + 1,
-      })
+      .update({ support_count: (duplicated.support_count || 0) + 1 })
       .eq("id", duplicated.id);
 
-    if (voteError) {
-      throw voteError;
-    }
-
-    return {
-      duplicated: true,
-      spot: duplicated,
-    };
+    return { duplicated: true, spot: duplicated };
   }
 
-  // INSERT NOVO
-  const { error } = await supabase
+  const { data: inserted, error } = await supabase
     .from("spot_requests")
     .insert({
       nome: data.nome,
@@ -52,50 +33,25 @@ export async function createSpotRequest(data) {
       lat: Number(data.lat),
       lng: Number(data.lng),
       votes: 1,
-    });
+      support_count: 1, // quem cadastrou já apoia
+    })
+    .select()
+    .single();
 
-  if (error) {
+  if (error) { console.error(error); throw error; }
 
-    console.error(error);
-
-    throw error;
-  }
-
-  return {
-    duplicated: false,
-  };
+  return { duplicated: false, spot: inserted };
 }
 
-// DISTÂNCIA
-function getDistanceFromLatLonInKm(
-  lat1,
-  lon1,
-  lat2,
-  lon2
-) {
-
+function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
   const R = 6371;
-
   const dLat = deg2rad(lat2 - lat1);
-
   const dLon = deg2rad(lon2 - lon1);
-
   const a =
-    Math.sin(dLat / 2) *
-    Math.sin(dLat / 2) +
-
-    Math.cos(deg2rad(lat1)) *
-    Math.cos(deg2rad(lat2)) *
-
-    Math.sin(dLon / 2) *
-    Math.sin(dLon / 2);
-
-  const c =
-    2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-  return R * c;
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
 }
 
-function deg2rad(deg) {
-  return deg * (Math.PI / 180);
-}
+function deg2rad(deg) { return deg * (Math.PI / 180); }

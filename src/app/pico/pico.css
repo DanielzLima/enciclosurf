@@ -72,6 +72,8 @@
 }
 
 
+
+
   .tide-list div{
     flex-direction:column;
     align-items:flex-start;
@@ -186,4 +188,33 @@
     #10b981,
     #059669
   );
+}
+
+/* community-score ocupa as 2 colunas do pico-status */
+.community-score-full {
+  grid-column: 1 / -1;
+}
+
+/* layout interno lado a lado */
+.community-score-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 12px;
+  align-items: start;
+}
+
+.community-score-bars {
+  min-width: 0;
+}
+
+.community-score-reports {
+  min-width: 0;
+}
+
+/* mobile — empilha */
+@media (max-width: 768px) {
+  .community-score-inner {
+    grid-template-columns: 1fr;
+  }
 }

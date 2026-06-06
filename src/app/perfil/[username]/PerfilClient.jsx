@@ -31,12 +31,22 @@ const ROLE_LABELS = {
   fa:           { label: "Fã do surf",          emoji: "❤️" },
 };
 
+const ACTION_LABEL = {
+  report:         { label: "Report de condições", emoji: "🌊" },
+  new_spot:       { label: "Novo pico sugerido",  emoji: "📍" },
+  spot_tag:       { label: "Tag local votada",    emoji: "🏷️" },
+  apoio_recebido: { label: "Apoio recebido",      emoji: "❤️" },
+};
+
 export default function PerfilClient({ profile, isOwner, currentUserId, jaApoiou }) {
   const [apoiado, setApoiado] = useState(jaApoiou);
   const [apoioCount, setApoioCount] = useState(profile.support_count ?? 0);
   const [loadingApoio, setLoadingApoio] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [linkCopiado, setLinkCopiado] = useState(false);
+  const [showHistorico, setShowHistorico] = useState(false);
+  const [historico, setHistorico] = useState([]);
+  const [loadingHistorico, setLoadingHistorico] = useState(false);
 
   const pri = ROLE_LABELS[profile.primary_role];
   const secs = (profile.secondary_roles ?? []).map((r) => ROLE_LABELS[r]).filter(Boolean);
@@ -71,6 +81,20 @@ export default function PerfilClient({ profile, isOwner, currentUserId, jaApoiou
     setLoadingApoio(false);
   }
 
+  async function loadHistorico() {
+    setLoadingHistorico(true);
+    setShowHistorico(true);
+    const supabase = createClient();
+    const { data } = await supabase
+      .from("points_log")
+      .select("action, points, created_at")
+      .eq("user_id", profile.id)
+      .order("created_at", { ascending: false })
+      .limit(20);
+    setHistorico(data || []);
+    setLoadingHistorico(false);
+  }
+
   function compartilhar() {
     const url = window.location.href;
     if (navigator.share) {
@@ -90,6 +114,77 @@ export default function PerfilClient({ profile, isOwner, currentUserId, jaApoiou
     <div className="pf-page">
       {showLogin && <AuthModal onClose={() => setShowLogin(false)} />}
 
+      {/* MODAL HISTÓRICO */}
+      {showHistorico && (
+        <div
+          style={{
+            position: "fixed", inset: 0,
+            background: "rgba(0,0,0,0.75)",
+            backdropFilter: "blur(8px)",
+            display: "flex", alignItems: "flex-end",
+            justifyContent: "center", zIndex: 9999,
+          }}
+          onClick={() => setShowHistorico(false)}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: "#0f172a",
+              border: "1px solid rgba(255,255,255,0.08)",
+              borderRadius: "20px 20px 0 0",
+              padding: "24px 20px 40px",
+              width: "100%", maxWidth: 560,
+              maxHeight: "70vh", overflowY: "auto",
+            }}
+          >
+            <div style={{ width: 36, height: 4, background: "rgba(255,255,255,0.15)", borderRadius: 99, margin: "0 auto 20px" }} />
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+              <h3 style={{ fontSize: 15, fontWeight: 600, color: "white" }}>Histórico de pontos</h3>
+              <span style={{ fontSize: 13, color: "#38bdf8", fontWeight: 700 }}>
+                {profile.contribution_points ?? 0} pts total
+              </span>
+            </div>
+
+            {loadingHistorico ? (
+              <p style={{ color: "#475569", fontSize: 13, textAlign: "center", padding: 20 }}>Carregando...</p>
+            ) : historico.length === 0 ? (
+              <p style={{ color: "#475569", fontSize: 13, textAlign: "center", padding: 20 }}>
+                Nenhum ponto ainda. Faça um report ou vote em tags! 🤙
+              </p>
+            ) : (
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                {historico.map((item, i) => {
+                  const acao = ACTION_LABEL[item.action] || { label: item.action, emoji: "⭐" };
+                  const data = new Date(item.created_at).toLocaleString("pt-BR", {
+                    day: "2-digit", month: "2-digit",
+                    hour: "2-digit", minute: "2-digit",
+                    timeZone: "America/Recife",
+                  });
+                  return (
+                    <div key={i} style={{
+                      display: "flex", alignItems: "center", justifyContent: "space-between",
+                      padding: "10px 12px",
+                      background: "rgba(255,255,255,0.03)",
+                      border: "1px solid rgba(255,255,255,0.06)",
+                      borderRadius: 10,
+                    }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                        <span style={{ fontSize: 16 }}>{acao.emoji}</span>
+                        <div>
+                          <p style={{ fontSize: 12, color: "white", fontWeight: 500 }}>{acao.label}</p>
+                          <p style={{ fontSize: 10, color: "#475569", marginTop: 2 }}>{data}</p>
+                        </div>
+                      </div>
+                      <span style={{ fontSize: 13, fontWeight: 700, color: "#38bdf8" }}>+{item.points}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       <div className="pf-card">
         <div className="pf-cover" />
         <div className="pf-body">
@@ -102,9 +197,7 @@ export default function PerfilClient({ profile, isOwner, currentUserId, jaApoiou
                 {profile.display_name?.[0]?.toUpperCase() ?? "?"}
               </div>
             )}
-            {isOwner && (
-              <a href="/perfil/editar" className="pf-edit-btn">✏️ Editar perfil</a>
-            )}
+            {isOwner && <a href="/perfil/editar" className="pf-edit-btn">✏️ Editar perfil</a>}
           </div>
 
           <h1 className="pf-name">{profile.display_name}</h1>
@@ -117,6 +210,7 @@ export default function PerfilClient({ profile, isOwner, currentUserId, jaApoiou
 
           <div className="pf-divider" />
 
+          {/* SELOS */}
           {pri && (
             <div className="pf-selos">
               <p className="pf-sec-label">Características</p>
@@ -129,6 +223,47 @@ export default function PerfilClient({ profile, isOwner, currentUserId, jaApoiou
             </div>
           )}
 
+          {/* PONTOS DE CONTRIBUIÇÃO */}
+          <div style={{
+            marginTop: 16,
+            background: "rgba(14,165,233,0.06)",
+            border: "1px solid rgba(14,165,233,0.15)",
+            borderRadius: 14,
+            padding: "14px 16px",
+          }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
+              <p style={{ fontSize: 13, fontWeight: 600, color: "white" }}>🏄 Pontos de Contribuição</p>
+              <span style={{
+                fontSize: 10, padding: "2px 8px", borderRadius: 999,
+                background: "rgba(245,158,11,0.15)", border: "1px solid rgba(245,158,11,0.25)",
+                color: "#f59e0b", fontWeight: 600,
+              }}>BETA</span>
+            </div>
+            <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between" }}>
+              <p style={{ fontSize: 28, fontWeight: 700, color: "#38bdf8", lineHeight: 1, letterSpacing: "-1px" }}>
+                {profile.contribution_points ?? 0}
+                <span style={{ fontSize: 13, fontWeight: 400, color: "#475569", marginLeft: 6 }}>pts</span>
+              </p>
+              {isOwner && (
+                <button onClick={loadHistorico} style={{
+                  fontSize: 11, color: "#38bdf8",
+                  background: "rgba(14,165,233,0.1)",
+                  border: "1px solid rgba(14,165,233,0.2)",
+                  borderRadius: 8, padding: "4px 10px", cursor: "pointer",
+                }}>
+                  Ver histórico
+                </button>
+              )}
+            </div>
+            <p style={{ fontSize: 11, color: "#475569", marginTop: 6, lineHeight: 1.5 }}>
+              Report: +10pts · Tag local: +5pts
+            </p>
+            <p style={{ fontSize: 10, color: "#334155", marginTop: 4 }}>
+              ⚠️ Sistema em fase de testes. Pontos acumulados contarão no programa de recompensas.
+            </p>
+          </div>
+
+          {/* APOIO */}
           <div className="pf-apoio">
             <div>
               <p className="pf-apoio-count">{apoioCount}</p>
@@ -147,10 +282,11 @@ export default function PerfilClient({ profile, isOwner, currentUserId, jaApoiou
             )}
           </div>
 
+          {/* REDES SOCIAIS */}
           {(profile.whatsapp || profile.instagram || profile.tiktok || profile.website) && (
             <>
               <div className="pf-divider" />
-              <p className="pf-sec-label">Midias sociais</p>
+              <p className="pf-sec-label">Mídias sociais</p>
               <div className="pf-contato">
                 {profile.whatsapp && (
                   <a href={`https://wa.me/55${profile.whatsapp.replace(/\D/g, "")}`} target="_blank" rel="noopener noreferrer" className="pf-contato-item">

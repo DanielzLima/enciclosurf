@@ -20,17 +20,29 @@ export default function Home() {
   const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
+  function handleOpenAddSpot() {
+    setOpenModal(true);
+  }
 
-    async function load() {
+  window.addEventListener(
+    "open-add-spot-modal",
+    handleOpenAddSpot
+  );
 
-      const data = await getPicos();
+  async function load() {
+    const data = await getPicos();
+    setPicos(data);
+  }
 
-      setPicos(data);
-    }
+  load();
 
-    load();
-
-  }, []);
+  return () => {
+    window.removeEventListener(
+      "open-add-spot-modal",
+      handleOpenAddSpot
+    );
+  };
+}, []);
 
   return (
     <>

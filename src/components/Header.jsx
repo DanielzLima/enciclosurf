@@ -22,36 +22,60 @@ export default function Header() {
     return data?.avatar_url ?? null;
   }, []);
 
-  useEffect(() => {
-    const supabase = createClient();
+useEffect(() => {
+  const supabase = createClient();
 
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      const u = session?.user ?? null;
-      setUser(u);
-      if (u) {
+  supabase.auth.getSession().then(async ({ data: { session } }) => {
+    const u = session?.user ?? null;
+    setUser(u);
+
+    if (u) {
+      const av = await fetchProfile(u.id);
+      setAvatarUrl(av ?? u.user_metadata?.avatar_url ?? null);
+    }
+  });
+
+  const {
+    data: { subscription },
+  } = supabase.auth.onAuthStateChange(async (event, session) => {
+    const u = session?.user ?? null;
+
+    setUser(u);
+
+    if (u) {
+      setTimeout(async () => {
         const av = await fetchProfile(u.id);
         setAvatarUrl(av ?? u.user_metadata?.avatar_url ?? null);
-      }
-    });
+      }, 500);
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        const u = session?.user ?? null;
-        setUser(u);
-        if (u) {
-          // pequeno delay para garantir que a sessão está ativa antes da query
-          setTimeout(async () => {
-            const av = await fetchProfile(u.id);
-            setAvatarUrl(av ?? u.user_metadata?.avatar_url ?? null);
-          }, 500);
-        } else {
-          setAvatarUrl(null);
-        }
-      }
-    );
+      const intencao = sessionStorage.getItem("pos_login");
 
-    return () => subscription.unsubscribe();
-  }, [fetchProfile]);
+      if (intencao === "add_spot") {
+        sessionStorage.removeItem("pos_login");
+
+        setTimeout(() => {
+          window.dispatchEvent(
+            new CustomEvent("open-add-spot-modal")
+          );
+        }, 800);
+      }
+    } else {
+      setAvatarUrl(null);
+    }
+  });
+
+  function handleOpenAuth() {
+    setAuthOpen(true);
+  }
+
+  window.addEventListener("open-auth-modal", handleOpenAuth);
+
+  return () => {
+    subscription.unsubscribe();
+    window.removeEventListener("open-auth-modal", handleOpenAuth);
+  };
+}, [fetchProfile]);
+
 
   async function handleLogout() {
     const supabase = createClient();
@@ -83,7 +107,7 @@ export default function Header() {
 
         <Link href="/" className="logo">
           <img src="/Enciclosurf-logo.jpg" alt="Enciclosurf" />
-          <span>Enciclosurf</span>
+          <span>EncicloSurf</span>
         </Link>
 
         <nav className="nav">

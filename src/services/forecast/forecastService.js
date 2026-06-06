@@ -78,9 +78,10 @@ export async function getTideData(uf) {
     const url = `https://api.stormglass.io/v2/tide/extremes/point?lat=${coords.lat}&lng=${coords.lng}&start=${inicio.toISOString()}&end=${fim.toISOString()}`;
 
     const res = await fetch(url, {
-      headers: { Authorization: STORMGLASS_KEY },
-      next: { revalidate: 43200 }, // cache 12h
-    });
+    headers: { Authorization: STORMGLASS_KEY },
+    next: { revalidate: 43200 }, // 12h
+    cache: "no-store", // ← força buscar sempre em produção
+  });
 
     const data = await res.json();
 
