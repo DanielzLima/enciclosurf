@@ -1,7 +1,7 @@
-import { createClient } from "../../../../../lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 
-const ADMIN_EMAILS = ["dvfldev22@gmail.com"]; // ← mesmo email
+const ADMIN_EMAILS = ["dvfldev22@gmail.com"]; 
 
 export async function POST(request) {
   const supabase = await createClient();

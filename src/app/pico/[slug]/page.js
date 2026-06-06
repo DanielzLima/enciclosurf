@@ -1,18 +1,18 @@
 import { getPicoBySlug } from "../../../services/supabase/picosService";
-import ForecastChart from "../../../components/ForecastChart";
-import Map from "../../../components/Map";
-import ReportButtons from "../../../components/ReportButtons";
-import PicoSupport from "../../../components/PicoSupport";
+import ForecastChart from "@/components/ForecastChart";
+import Map from "@/components/Map";
+import ReportButtons from "@/components/ReportButtons";
+
 import "../pico.css";
 import Script from "next/script";
 import { getMarineForecast, getTideData } from "../../../services/forecast/forecastService";
 import { formatWave, getDirectionFull } from "../../../utils/surfFormatters";
 import { getTodayReports, getYesterdayReports } from "../../../services/supabase/reportsService";
 import { createClient } from "../../../lib/supabase/server";
-import PicoTags from "../../../components/PicoTags";
-import PicoTagsTop from "../../../components/PicoTagsTop";
-import PicoTagsVotar from "../../../components/PicoTagsVotar";
-import RecentReports from "../../../components/RecentReports";
+import PicoTags from "@/components/PicoTags";
+import PicoTagsTop from "@/components/PicoTagsTop";
+import PicoTagsVotar from "@/components/PicoTagsVotar";
+import RecentReports from "@/components/RecentReports";
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
