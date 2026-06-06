@@ -37,12 +37,14 @@ export default function ReportButtons({ spotId }) {
 
       // PONTOS — máximo 2 reports por dia por usuário por pico
       const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
+        const { data: { user } } = await supabase.auth.getUser();
 
-      if (user) {
-        const hoje = new Date();
-        hoje.setHours(0, 0, 0, 0);
-
+        if (user) {
+          const { data: resultado } = await supabase.rpc("add_contribution_points", {
+            p_user_id: user.id,
+            p_action: "report",
+            p_ref_id: spotId,
+          });
         // conta quantos reports o usuário já fez hoje neste pico
         const { count } = await supabase
           .from("points_log")
