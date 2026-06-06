@@ -6,7 +6,12 @@ export async function GET(request) {
   const code = searchParams.get("code");
 
   // usa a variável de ambiente se disponível, senão usa o origin da request
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? origin;
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+
+  if (!siteUrl) {
+  throw new Error("NEXT_PUBLIC_SITE_URL não definida");
+}
+  
 
   if (code) {
     const supabase = await createClient();
@@ -28,7 +33,9 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? origin;
         return NextResponse.redirect(`${siteUrl}/onboarding`);
       }
 
-      return NextResponse.redirect(`${siteUrl}/perfil/${profile.username}`);
+      return NextResponse.redirect(
+        `https://www.enciclosurf.com.br/perfil/${profile.username}`
+      );
     }
   }
 
