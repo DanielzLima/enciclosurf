@@ -22,60 +22,44 @@ export default function Header() {
     return data?.avatar_url ?? null;
   }, []);
 
-useEffect(() => {
-  const supabase = createClient();
+  useEffect(() => {
+    const supabase = createClient();
 
-  supabase.auth.getSession().then(async ({ data: { session } }) => {
-    const u = session?.user ?? null;
-    setUser(u);
-
-    if (u) {
-      const av = await fetchProfile(u.id);
-      setAvatarUrl(av ?? u.user_metadata?.avatar_url ?? null);
-    }
-  });
-
-  const {
-    data: { subscription },
-  } = supabase.auth.onAuthStateChange(async (event, session) => {
-    const u = session?.user ?? null;
-
-    setUser(u);
-
-    if (u) {
-      setTimeout(async () => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
+      const u = session?.user ?? null;
+      setUser(u);
+      if (u) {
         const av = await fetchProfile(u.id);
         setAvatarUrl(av ?? u.user_metadata?.avatar_url ?? null);
-      }, 500);
-
-      const intencao = sessionStorage.getItem("pos_login");
-
-      if (intencao === "add_spot") {
-        sessionStorage.removeItem("pos_login");
-
-        setTimeout(() => {
-          window.dispatchEvent(
-            new CustomEvent("open-add-spot-modal")
-          );
-        }, 800);
       }
-    } else {
-      setAvatarUrl(null);
-    }
-  });
+    });
 
-  function handleOpenAuth() {
-    setAuthOpen(true);
-  }
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      const u = session?.user ?? null;
+      setUser(u);
+      if (u) {
+        setTimeout(async () => {
+          const av = await fetchProfile(u.id);
+          setAvatarUrl(av ?? u.user_metadata?.avatar_url ?? null);
+        }, 500);
+        const intencao = sessionStorage.getItem("pos_login");
+        if (intencao === "add_spot") {
+          sessionStorage.removeItem("pos_login");
+          setTimeout(() => window.dispatchEvent(new CustomEvent("open-add-spot-modal")), 800);
+        }
+      } else {
+        setAvatarUrl(null);
+      }
+    });
 
-  window.addEventListener("open-auth-modal", handleOpenAuth);
+    function handleOpenAuth() { setAuthOpen(true); }
+    window.addEventListener("open-auth-modal", handleOpenAuth);
 
-  return () => {
-    subscription.unsubscribe();
-    window.removeEventListener("open-auth-modal", handleOpenAuth);
-  };
-}, [fetchProfile]);
-
+    return () => {
+      subscription.unsubscribe();
+      window.removeEventListener("open-auth-modal", handleOpenAuth);
+    };
+  }, [fetchProfile]);
 
   async function handleLogout() {
     const supabase = createClient();
@@ -84,7 +68,7 @@ useEffect(() => {
       setUser(null);
       setAvatarUrl(null);
       setMenuOpen(false);
-      window.location.href = "/"; // força reload completo para limpar estado
+      window.location.href = "/";
     }
   }
 
@@ -110,41 +94,43 @@ useEffect(() => {
           <span>EncicloSurf</span>
         </Link>
 
+        {/* DESKTOP NAV */}
         <nav className="nav">
-          <Link href="#">Previsão</Link>
-          <Link href="#">Blog</Link>
-          <Link href="#">Picos</Link>
-          <Link href="#">Social</Link>
+          <Link href="/blog">Blog</Link>
+          <Link href="/apoie" style={{ color: "var(--primary)", fontWeight: 600 }}>Apoie</Link>
+          <Link href="/parceiros">Parceiros</Link>
+          <Link href="/market">
+            EncicloMarket
+            <span style={{
+              marginLeft: 6, fontSize: 9, padding: "1px 6px",
+              borderRadius: 999, background: "rgba(14,165,233,0.15)",
+              border: "1px solid rgba(14,165,233,0.3)",
+              color: "var(--primary)", fontWeight: 700,
+              verticalAlign: "middle",
+            }}>
+              EM BREVE
+            </span>
+          </Link>
         </nav>
 
-        {/* DESKTOP */}
+        {/* DESKTOP ACTIONS */}
         <div className="actions">
           {user ? (
             <>
-              <Link href="/perfil" className="header-avatar">
-                {avatarContent}
-              </Link>
+              <Link href="/perfil" className="header-avatar">{avatarContent}</Link>
               <button className="buttonLogin" onClick={handleLogout}>Sair</button>
             </>
           ) : (
-            <button className="buttonLogin" onClick={() => setAuthOpen(true)}>
-              Entrar
-            </button>
+            <button className="buttonLogin" onClick={() => setAuthOpen(true)}>Entrar</button>
           )}
         </div>
 
-        {/* MOBILE — avatar/pessoa + hamburguer */}
+        {/* MOBILE */}
         <div className="header-mobile-right">
           {user ? (
-            <Link href="/perfil" className="header-avatar">
-              {avatarContent}
-            </Link>
+            <Link href="/perfil" className="header-avatar">{avatarContent}</Link>
           ) : (
-            <button
-              className="header-avatar header-avatar-guest"
-              onClick={() => setAuthOpen(true)}
-              aria-label="Entrar"
-            >
+            <button className="header-avatar header-avatar-guest" onClick={() => setAuthOpen(true)} aria-label="Entrar">
               <AvatarIcon />
             </button>
           )}
@@ -153,37 +139,33 @@ useEffect(() => {
 
       </div>
 
-      {/* MODAL DE LOGIN */}
       {authOpen && typeof window !== "undefined" && createPortal(
         <AuthModal onClose={() => setAuthOpen(false)} />,
         document.body
       )}
 
-      {menuOpen && (
-        <div className="mobile-overlay" onClick={() => setMenuOpen(false)} />
-      )}
+      {menuOpen && <div className="mobile-overlay" onClick={() => setMenuOpen(false)} />}
 
       <aside className={`mobile-drawer ${menuOpen ? "open" : ""}`}>
         <button className="close-menu" onClick={() => setMenuOpen(false)}>✕</button>
 
         <nav className="mobile-nav">
           <Link href="/" onClick={() => setMenuOpen(false)}>Home</Link>
-          <Link href="#" onClick={() => setMenuOpen(false)}>Previsão</Link>
-          <Link href="#" onClick={() => setMenuOpen(false)}>Blog</Link>
-          <Link href="#" onClick={() => setMenuOpen(false)}>Picos</Link>
-          <Link href="#" onClick={() => setMenuOpen(false)}>Social</Link>
+          <Link href="/blog" onClick={() => setMenuOpen(false)}>Blog</Link>
+          <Link href="/apoie" onClick={() => setMenuOpen(false)} style={{ color: "var(--primary)" }}>
+            🤙 Apoie a Enciclosurf
+          </Link>
+          <Link href="/parceiros" onClick={() => setMenuOpen(false)}>Parceiros</Link>
+          <Link href="/market" onClick={() => setMenuOpen(false)}>
+            EncicloMarket <span style={{ fontSize: 10, color: "var(--muted)" }}>em breve</span>
+          </Link>
         </nav>
 
         <div className="mobile-actions">
           {user ? (
-            <button className="buttonLogin" onClick={handleLogout}>
-              Sair
-            </button>
+            <button className="buttonLogin" onClick={handleLogout}>Sair</button>
           ) : (
-            <button
-              className="buttonLogin"
-              onClick={() => { setMenuOpen(false); setAuthOpen(true); }}
-            >
+            <button className="buttonLogin" onClick={() => { setMenuOpen(false); setAuthOpen(true); }}>
               Entrar
             </button>
           )}

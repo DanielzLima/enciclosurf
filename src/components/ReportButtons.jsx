@@ -35,33 +35,16 @@ export default function ReportButtons({ spotId }) {
 
       await saveReportTags(response.report.id, selectedTags);
 
-      // PONTOS — máximo 2 reports por dia por usuário por pico
+      // PONTOS — a função no banco já controla o limite de 2/dia
       const supabase = createClient();
-        const { data: { user } } = await supabase.auth.getUser();
+      const { data: { user } } = await supabase.auth.getUser();
 
-        if (user) {
-          const { data: resultado } = await supabase.rpc("add_contribution_points", {
-            p_user_id: user.id,
-            p_action: "report",
-            p_ref_id: spotId,
-          });
-        // conta quantos reports o usuário já fez hoje neste pico
-        const { count } = await supabase
-          .from("points_log")
-          .select("id", { count: "exact", head: true })
-          .eq("user_id", user.id)
-          .eq("action", "report")
-          .eq("ref_id", spotId) // ref_id guarda o spotId para reports
-          .gte("created_at", hoje.toISOString());
-
-        // só pontua se fez menos de 2 hoje
-        if ((count ?? 0) < 2) {
-          await supabase.rpc("add_contribution_points", {
-            p_user_id: user.id,
-            p_action: "report",
-            p_ref_id: spotId, // guarda spotId para poder contar por pico
-          });
-        }
+      if (user) {
+        await supabase.rpc("add_contribution_points", {
+          p_user_id: user.id,
+          p_action: "report",
+          p_ref_id: spotId,
+        });
       }
 
       setMessage("Report enviado com sucesso 🌊");
@@ -69,7 +52,7 @@ export default function ReportButtons({ spotId }) {
       setSelectedRating(null);
 
     } catch (err) {
-      console.log(err);
+      console.error(err);
       setMessage("Erro ao enviar report.");
     } finally {
       setLoading(false);
@@ -80,32 +63,18 @@ export default function ReportButtons({ spotId }) {
   return (
     <div className="report-wrapper">
       <div className="report-buttons">
-        <button
-          className="report-btn classic"
-          onClick={() => handleVote("classic")}
-          disabled={loading}
-        >
+        <button className="report-btn classic" onClick={() => handleVote("classic")} disabled={loading}>
           🌊 Clássico
         </button>
-        <button
-          className="report-btn good"
-          onClick={() => handleVote("good")}
-          disabled={loading}
-        >
+        <button className="report-btn good" onClick={() => handleVote("good")} disabled={loading}>
           🟡 Boas
         </button>
-        <button
-          className="report-btn flat"
-          onClick={() => handleVote("flat")}
-          disabled={loading}
-        >
+        <button className="report-btn flat" onClick={() => handleVote("flat")} disabled={loading}>
           🔴 Flat
         </button>
       </div>
 
-      {message && (
-        <div className="report-message">{message}</div>
-      )}
+      {message && <div className="report-message">{message}</div>}
 
       <ReportTagsModal
         open={openTagsModal}

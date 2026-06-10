@@ -204,7 +204,7 @@ h1,h2,h3,h4 {
   text-align: center;
   color: white;
 
-  background: url('/assets/imagem1.jpeg') center/cover no-repeat;
+  background: url('/assets/imagem1.jpg') center/cover no-repeat;
 }
 
 /* OVERLAY ESCURO */

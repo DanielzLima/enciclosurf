@@ -1,4 +1,3 @@
-
 "use client";
 
 import { createClient } from "@/lib/supabase/client";
@@ -35,17 +34,16 @@ const ROLES = [
 
 const CATS = [...new Set(ROLES.map((r) => r.cat))];
 
-// 3 etapas: "primary" | "secondary" | "done"
 export default function OnboardingPage() {
   const router = useRouter();
   const [step, setStep] = useState("primary");
   const [primaryRole, setPrimaryRole] = useState(null);
   const [secondaryRoles, setSecondaryRoles] = useState([]);
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState(null);
 
   function selectPrimary(role) {
     setPrimaryRole(role);
-    // pequeno delay para o usuário ver o highlight antes de avançar
     setTimeout(() => setStep("secondary"), 350);
   }
 
@@ -58,37 +56,54 @@ export default function OnboardingPage() {
   }
 
   async function handleSave() {
+    if (!primaryRole) {
+      setError("Escolha pelo menos uma característica principal.");
+      return;
+    }
+
     setSaving(true);
-    const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    
-    router.push(`/perfil/${username}`);
-     if (!primaryRole) {
-            setError("Escolha pelo menos um papel principal.");
-            return;
+    setError(null);
+
+    try {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (!user) {
+        router.push("/");
+        return;
+      }
+
+      await supabase
+        .from("profiles")
+        .update({
+          primary_role: primaryRole.id,
+          secondary_roles: secondaryRoles,
+        })
+        .eq("id", user.id);
+
+      // busca o username para redirecionar ao perfil
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("username")
+        .eq("id", user.id)
+        .single();
+
+      setStep("done");
+
+      setTimeout(() => {
+        if (profile?.username) {
+          router.push(`/perfil/${profile.username}`);
+        } else {
+          router.push("/perfil/editar");
         }
+      }, 2000);
 
-        // ← adiciona essa validação
-        if (!username || username.length < 3 || usernameError) {
-            setError("Escolha um nome de usuário válido.");
-            return;
-        }
-
-        setSaving(true);
-
-    await supabase
-      .from("profiles")
-      .update({
-        primary_role: primaryRole.id,
-        secondary_roles: secondaryRoles,
-      })
-      .eq("id", user.id);
-
-    setStep("done");
-    setSaving(false);
-
-    // redireciona para home após 2s mostrando a tela de boas-vindas
-    setTimeout(() => router.push("/"), 2000);
+    } catch (err) {
+      console.error(err);
+      setError("Erro ao salvar. Tente novamente.");
+    } finally {
+      setSaving(false);
+    }
   }
 
   const secRoles = ROLES.filter((r) => secondaryRoles.includes(r.id));
@@ -96,14 +111,13 @@ export default function OnboardingPage() {
 
   return (
     <div className="ob-container">
-      {/* Barra de progresso */}
       <div className="ob-progress">
         <div className={`ob-dot ${step === "primary" ? "active" : "done"}`} />
         <div className={`ob-dot ${step === "secondary" ? "active" : step === "done" ? "done" : ""}`} />
         <div className={`ob-dot ${step === "done" ? "active" : ""}`} />
       </div>
 
-      {/* ── ETAPA 1: papel principal ── */}
+      {/* ETAPA 1 */}
       {step === "primary" && (
         <div className="ob-step ob-enter">
           <img src="/Enciclosurf-logo.jpg" alt="Enciclosurf" className="ob-logo" />
@@ -115,11 +129,7 @@ export default function OnboardingPage() {
               <span className="ob-cat-label">{cat}</span>
               <div className="ob-tags">
                 {ROLES.filter((r) => r.cat === cat).map((role) => (
-                  <button
-                    key={role.id}
-                    className="ob-tag"
-                    onClick={() => selectPrimary(role)}
-                  >
+                  <button key={role.id} className="ob-tag" onClick={() => selectPrimary(role)}>
                     {role.emoji} {role.label}
                   </button>
                 ))}
@@ -129,30 +139,25 @@ export default function OnboardingPage() {
         </div>
       )}
 
-      {/* ── ETAPA 2: características extras ── */}
+      {/* ETAPA 2 */}
       {step === "secondary" && (
         <div className="ob-step ob-enter">
-          {/* badge do papel principal escolhido */}
           <div className="ob-badge-pri">
             {primaryRole.emoji} {primaryRole.label}
           </div>
 
-          <h1>Adicione até 2 sub-catégorias</h1>
+          <h1>Adicione seus vibes</h1>
           <p className="ob-sub">
             Escolha até <strong>2 características</strong> que também combinam com você.{" "}
             <span className="ob-counter">
-              {secondaryRoles.length === 0
-                ? "(opcional)"
-                : secondaryRoles.length === 2
-                ? "Máximo atingido"
+              {secondaryRoles.length === 0 ? "(opcional)"
+                : secondaryRoles.length === 2 ? "Máximo atingido"
                 : `${left} restante`}
             </span>
           </p>
 
           {CATS.map((cat) => {
-            const available = ROLES.filter(
-              (r) => r.cat === cat && r.id !== primaryRole.id
-            );
+            const available = ROLES.filter((r) => r.cat === cat && r.id !== primaryRole.id);
             if (!available.length) return null;
             return (
               <div key={cat} className="ob-cat">
@@ -172,11 +177,9 @@ export default function OnboardingPage() {
             );
           })}
 
-          <button
-            className="ob-btn"
-            onClick={handleSave}
-            disabled={saving}
-          >
+          {error && <p style={{ color: "#f87171", fontSize: 13, marginTop: 8 }}>{error}</p>}
+
+          <button className="ob-btn" onClick={handleSave} disabled={saving}>
             {saving ? "Salvando..." : "Entrar na plataforma →"}
           </button>
           <button className="ob-skip" onClick={handleSave}>
@@ -185,7 +188,7 @@ export default function OnboardingPage() {
         </div>
       )}
 
-      {/* ── ETAPA 3: boas-vindas ── */}
+      {/* ETAPA 3 */}
       {step === "done" && (
         <div className="ob-step ob-enter ob-finish">
           <div className="ob-finish-icon">🤙</div>
