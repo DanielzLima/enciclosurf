@@ -10,32 +10,26 @@ export default function PicoSupport({ picoId, initialCount, currentUserId, jaApo
   const [loading, setLoading] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
 
-  async function toggleApoio() {
+  async function handleApoiar() {
     if (!currentUserId) { setShowLogin(true); return; }
+    if (apoiado || loading) return; // já apoiou — não faz nada
 
     setLoading(true);
     const supabase = createClient();
 
-    if (apoiado) {
-      await supabase.from("pico_supports").delete()
-        .eq("pico_id", picoId)
-        .eq("user_id", currentUserId);
-      await supabase.from("picos")
-        .update({ support_count: count - 1 })
-        .eq("id", picoId);
-      setApoiado(false);
-      setCount((c) => c - 1);
-    } else {
-      await supabase.from("pico_supports").insert({
-        pico_id: picoId,
-        user_id: currentUserId,
-      });
+    const { error } = await supabase.from("pico_supports").insert({
+      pico_id: picoId,
+      user_id: currentUserId,
+    });
+
+    if (!error) {
       await supabase.from("picos")
         .update({ support_count: count + 1 })
         .eq("id", picoId);
       setApoiado(true);
       setCount((c) => c + 1);
     }
+
     setLoading(false);
   }
 
@@ -44,39 +38,29 @@ export default function PicoSupport({ picoId, initialCount, currentUserId, jaApo
       {showLogin && <AuthModal onClose={() => setShowLogin(false)} />}
 
       <div style={{
-        display: "flex",
-        alignItems: "center",
-        gap: 12,
+        display: "flex", alignItems: "center", gap: 12,
         background: "rgba(255,255,255,0.04)",
         border: "1px solid rgba(255,255,255,0.08)",
-        borderRadius: 14,
-        padding: "12px 16px",
-        marginTop: 16,
+        borderRadius: 14, padding: "12px 16px", marginTop: 16,
       }}>
         <div>
-          <p style={{ fontSize: 22, fontWeight: 700, color: "white", lineHeight: 1 }}>
-            {count}
-          </p>
+          <p style={{ fontSize: 22, fontWeight: 700, color: "white", lineHeight: 1 }}>{count}</p>
           <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 2 }}>
             {count === 1 ? "pessoa apoia este pico" : "pessoas apoiam este pico"}
           </p>
         </div>
         <button
-          onClick={toggleApoio}
-          disabled={loading}
+          onClick={handleApoiar}
+          disabled={loading || apoiado}
           style={{
             marginLeft: "auto",
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 6,
-            padding: "8px 18px",
-            borderRadius: 999,
-            fontSize: 13,
-            fontWeight: 600,
+            display: "inline-flex", alignItems: "center", gap: 6,
+            padding: "8px 18px", borderRadius: 999,
+            fontSize: 13, fontWeight: 600,
             border: apoiado ? "1.5px solid var(--primary)" : "1px solid rgba(255,255,255,0.15)",
             background: apoiado ? "rgba(14,165,233,0.15)" : "rgba(255,255,255,0.05)",
             color: apoiado ? "var(--primary)" : "var(--muted)",
-            cursor: loading ? "not-allowed" : "pointer",
+            cursor: apoiado ? "default" : loading ? "not-allowed" : "pointer",
             transition: "0.2s",
           }}
         >

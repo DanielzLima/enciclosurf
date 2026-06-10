@@ -78,6 +78,7 @@ export default function OnboardingPage() {
         .update({
           primary_role: primaryRole.id,
           secondary_roles: secondaryRoles,
+          onboarding_done: true,
         })
         .eq("id", user.id);
 

@@ -5,53 +5,6 @@ import { createClient } from "@/lib/supabase/client";
 export async function createReport(spotId, rating, sessionId) {
   const supabase = createClient();
 
-  const hoje = new Date();
-  hoje.setHours(0, 0, 0, 0);
-
-  // verifica usuário logado primeiro
-  const { data: { user } } = await supabase.auth.getUser();
-
-  if (user) {
-    // LOGADO: limite de 2 reports por dia por pico por usuário
-    const { count } = await supabase
-      .from("reports")
-      .select("id", { count: "exact", head: true })
-      .eq("spot_id", spotId)
-      .eq("session_id", sessionId) // session vinculada ao user
-      .gte("created_at", hoje.toISOString());
-
-    // usa points_log como fonte da verdade para usuários logados
-    const { count: countLog } = await supabase
-      .from("points_log")
-      .select("id", { count: "exact", head: true })
-      .eq("user_id", user.id)
-      .eq("action", "report")
-      .eq("ref_id", spotId)
-      .gte("created_at", hoje.toISOString());
-
-    if ((countLog ?? 0) >= 2) {
-      return {
-        success: false,
-        message: "Você já fez 2 reports hoje neste pico 🤙 Volte amanhã!",
-      };
-    }
-  } else {
-    // NÃO LOGADO: limite por session_id
-    const { count } = await supabase
-      .from("reports")
-      .select("id", { count: "exact", head: true })
-      .eq("spot_id", spotId)
-      .eq("session_id", sessionId)
-      .gte("created_at", hoje.toISOString());
-
-    if ((count ?? 0) >= 2) {
-      return {
-        success: false,
-        message: "Limite de reports atingido para hoje 🤙",
-      };
-    }
-  }
-
   const { data, error } = await supabase
     .from("reports")
     .insert({ spot_id: spotId, rating, session_id: sessionId })
@@ -59,6 +12,12 @@ export async function createReport(spotId, rating, sessionId) {
     .single();
 
   if (error) {
+    if (error.message?.includes("limite_diario") || error.code === "P0001") {
+      return {
+        success: false,
+        message: "Número máximo de reports diários atingido 🤙",
+      };
+    }
     console.error(error);
     return { success: false, message: "Erro ao enviar report." };
   }
