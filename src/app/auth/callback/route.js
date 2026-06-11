@@ -4,30 +4,33 @@ import { NextResponse } from "next/server";
 export async function GET(request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || origin;
+
+  // usa sempre o origin da requisição — funciona em qualquer domínio
+  const redirectBase = origin;
 
   if (code) {
     const supabase = await createClient();
     const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (!error && data.user) {
+      // aguarda o trigger criar o profile (pequeno delay)
+      await new Promise((r) => setTimeout(r, 500));
+
       const { data: profile } = await supabase
         .from("profiles")
-        .select("username, primary_role, onboarding_done")
+        .select("username, onboarding_done")
         .eq("id", data.user.id)
         .single();
 
-      // onboarding só se nunca completou
       if (!profile?.onboarding_done) {
-        return NextResponse.redirect(`${siteUrl}/onboarding`);
+        return NextResponse.redirect(`${redirectBase}/onboarding`);
       }
 
-      // já completou — vai ao perfil
       if (profile?.username) {
-        return NextResponse.redirect(`${siteUrl}/perfil/${profile.username}`);
+        return NextResponse.redirect(`${redirectBase}/perfil/${profile.username}`);
       }
 
-      return NextResponse.redirect(`${siteUrl}/`);
+      return NextResponse.redirect(`${redirectBase}/`);
     }
   }
 
