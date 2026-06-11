@@ -73,16 +73,24 @@ export default function OnboardingPage() {
         return;
       }
 
-      await supabase
+
+      // busca o username para redirecionar ao perfil
+      const { data, error } = await supabase
         .from("profiles")
         .update({
           primary_role: primaryRole.id,
           secondary_roles: secondaryRoles,
           onboarding_done: true,
         })
-        .eq("id", user.id);
+        .eq("id", user.id)
+        .select();
 
-      // busca o username para redirecionar ao perfil
+        if (error) throw error;
+
+        if (!data?.length) {
+          throw new Error("Perfil não encontrado para atualização.");
+     }
+
       const { data: profile } = await supabase
         .from("profiles")
         .select("username")
